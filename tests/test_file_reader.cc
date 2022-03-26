@@ -1,14 +1,15 @@
 #include <catch2/catch.hpp>
 
-#include <core/file_handler.h>
+#include <core/file_reader.h>
 
-using naivebayes::File_Handler;
+using naivebayes::FileReader;
 using naivebayes::Image;
 
 TEST_CASE("Test reading from data file") {
   std::string path_to_data = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\minitrainingimagesandlabels.txt)";
-  File_Handler file_handler = File_Handler(path_to_data);
-  std::vector<Image> images = file_handler.ReadDataFile();
+  std::ifstream data_file(path_to_data);
+  FileReader file_handler = FileReader(data_file);
+  std::vector<Image> images = file_handler.GetImages();
 
   SECTION("Correct vector size") {
     REQUIRE(images.size() == 4);
