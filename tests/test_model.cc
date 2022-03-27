@@ -63,6 +63,4 @@ TEST_CASE("Test prior probability computation") {
   SECTION("Tenth element") {
     REQUIRE(model.GetPriorProbs()[9] == Approx(0.07143).epsilon(0.01));
   }
-  
-  
 }

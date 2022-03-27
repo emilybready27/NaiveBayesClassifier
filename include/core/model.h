@@ -15,7 +15,9 @@ class Model {
   
   std::vector<float> GetPriorProbs() const;
   
-  std::vector<std::vector<float>> GetFeatureProbs() const;
+  std::vector<std::vector<float>> GetFeatureProbs0() const;
+  
+  std::vector<std::vector<float>> GetFeatureProbs1() const;
   
  private:
   /**
@@ -36,11 +38,15 @@ class Model {
   
   std::vector<float> prior_probs_;
   
-  std::vector<std::vector<float>> feature_probs_;
+  std::vector<std::vector<float>> feature_probs_0_;
+  
+  std::vector<std::vector<float>> feature_probs_1_;
   
   void ConstructNumberClasses(const std::vector<Image>& images);
   
   void ComputePriorProbs();
+  
+  void ComputeFeatureProbs();
 };
 
 

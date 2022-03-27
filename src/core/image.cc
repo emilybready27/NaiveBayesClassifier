@@ -23,12 +23,21 @@ std::vector<std::vector<char>> Image::GetPixels() const {
   return pixels_;
 }
 
-std::string Image::GetPixelColor(int row, int column) const {
-  return (pixels_[row][column] == ' ') ? "unshaded" : "shaded";
+int Image::GetPixelColor(int row, int column) const {
+  return (pixels_[row][column] == ' ') ? 0 : 1;
 }
 
 int Image::GetClassNumber() const {
   return class_number_;
 }
+
+int Image::GetNumberRows() const {
+  return pixels_.size();
+}
+
+int Image::GetNumberColumns() const {
+  return pixels_[0].size();
+}
+
 
 } // namespace naivebayes

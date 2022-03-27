@@ -12,10 +12,14 @@ class Image {
 
   std::vector<std::vector<char>> GetPixels() const;
   
-  std::string GetPixelColor(int row, int column) const;
+  int GetPixelColor(int row, int column) const;
 
   int GetClassNumber() const;
-
+  
+  int GetNumberRows() const;
+  
+  int GetNumberColumns() const;
+  
  private:
   std::vector<std::vector<char>> pixels_;
   int class_number_;

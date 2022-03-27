@@ -15,14 +15,14 @@ TEST_CASE("Test Image GetPixelColor") {
   Image image = Image(pixels, 0);
   
   SECTION("' ' pixels are unshaded") {
-    REQUIRE(image.GetPixelColor(0,0) == "unshaded");
+    REQUIRE(image.GetPixelColor(0,0) == 0);
   }
   
   SECTION("'+' pixels are shaded") {
-    REQUIRE(image.GetPixelColor(0,3) == "shaded");
+    REQUIRE(image.GetPixelColor(0,3) == 1);
   }
   
   SECTION("'#' pixels are shaded") {
-    REQUIRE(image.GetPixelColor(0,4) == "shaded");
+    REQUIRE(image.GetPixelColor(0,4) == 1);
   }
 }
