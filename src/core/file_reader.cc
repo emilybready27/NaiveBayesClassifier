@@ -44,6 +44,9 @@ FileReader::FileReader(std::istream& input) {
     }
   }
 }
+
+// another constructor for reading saved models
+
 std::vector<Image> FileReader::GetImages() const {
   return images_;
 }

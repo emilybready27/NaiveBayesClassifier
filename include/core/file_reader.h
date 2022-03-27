@@ -11,6 +11,8 @@ class FileReader {
 
   FileReader(std::istream& input);
   
+  // annother constructor for reading saved models
+  
   std::vector<Image> GetImages() const;
   
  private:  

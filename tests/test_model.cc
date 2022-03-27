@@ -5,7 +5,7 @@
 
 using naivebayes::Model;
 
-TEST_CASE("Test image storage") {
+TEST_CASE("Test operator overload") {
   Model model = Model();
   std::string path_to_data = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\minitrainingimagesandlabels.txt)";
   std::ifstream data_file(path_to_data);
@@ -63,4 +63,13 @@ TEST_CASE("Test prior probability computation") {
   SECTION("Tenth element") {
     REQUIRE(model.GetPriorProbs()[9] == Approx(0.07143).epsilon(0.01));
   }
+}
+
+TEST_CASE("Test feature probability computation") {
+  Model model = Model();
+  std::string path_to_data = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\minitrainingimagesandlabels.txt)";
+  std::ifstream data_file(path_to_data);
+  data_file >> model;
+  
+  // TODO: add tests  
 }

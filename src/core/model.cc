@@ -1,7 +1,11 @@
 #include "core/model.h"
+#include "core/file_writer.h"
 #include <numeric>
 
 namespace naivebayes {
+
+Model::Model() {
+}
 
 std::istream& operator>> (std::istream& input, Model& model) {
   model.file_reader_ = FileReader(input);
@@ -10,10 +14,16 @@ std::istream& operator>> (std::istream& input, Model& model) {
   model.ConstructNumberClasses(images);
   
   model.ComputePriorProbs();
-  model.ComputeFeatureProbs();
+  model.ComputeFeatureProbsShaded();
   
   return input;
 }
+
+std::ostream& operator<< (std::ostream& output, Model& model) {
+//  model.file_writer_ = FileWriter(output, "save");
+  return output;
+}
+
 
 void Model::ConstructNumberClasses(const std::vector<Image>& images) {
   // initialize number classes
@@ -26,6 +36,9 @@ void Model::ConstructNumberClasses(const std::vector<Image>& images) {
     // add image to corresponding number class
     number_classes_[class_number].AddImage(image);
   }
+  
+  row_count_ = images[0].GetNumberRows();
+  column_count_ = images[0].GetNumberColumns();
 }
 
 void Model::ComputePriorProbs() {
@@ -40,28 +53,9 @@ void Model::ComputePriorProbs() {
   }
 }
 
-void Model::ComputeFeatureProbs() {
-  for (const NumberClass& numberClass : number_classes_) {
-    const std::vector<std::vector<int>> &shaded_counts =
-        numberClass.GetShadedCounts();
-    
-    for (const auto & shaded_count_row : shaded_counts) {
-      
-      std::vector<float> feature_probs_1_row;
-      std::vector<float> feature_probs_0_row;
-      
-      for (int shaded_count : shaded_count_row) {
-        float prob_0 = (numberClass.GetCount() - shaded_count + kLaplace)
-                       / (numberClass.GetCount() + (2 * kLaplace));
-        feature_probs_0_row.push_back(prob_0);
-        
-        float prob_1 = (shaded_count + kLaplace)
-                     / (numberClass.GetCount() + (2 * kLaplace));
-        feature_probs_1_row.push_back(prob_1);
-      }
-      
-      feature_probs_1_.emplace_back(feature_probs_1_row);
-    }
+void Model::ComputeFeatureProbsShaded() {
+  for (NumberClass& number_class : number_classes_) {
+    number_class.ComputeFeatureProbsShaded(kLaplace);
   }
 }
 
@@ -85,12 +79,13 @@ std::vector<float> Model::GetPriorProbs() const {
   return prior_probs_;
 }
 
-std::vector<std::vector<float>> Model::GetFeatureProbs0() const {
-  return feature_probs_0_;
-}
-
-std::vector<std::vector<float>> Model::GetFeatureProbs1() const {
-  return feature_probs_1_;
+std::vector<std::vector<float>>
+Model::GetFeatureProbsShaded(int class_number) const {
+  if (number_classes_[class_number].GetFeatureProbsShaded().empty()) {
+    std::vector<float> row(column_count_, 0.0);
+    return std::vector<std::vector<float>>(row_count_, row);
+  }
+  return number_classes_[class_number].GetFeatureProbsShaded();
 }
 
 } // namespace naivebayes

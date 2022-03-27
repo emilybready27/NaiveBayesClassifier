@@ -34,6 +34,26 @@ void NumberClass::UpdateShadedCounts(const Image& image) {
   }
 }
 
+void NumberClass::ComputeFeatureProbsShaded(float kLaplace) {
+  if (shaded_counts_.empty()) {
+    feature_probs_shaded_ = std::vector<std::vector<float>>(0);
+    return;
+  }
+  
+  for (const std::vector<int>& shaded_counts_row : shaded_counts_) {
+    std::vector<float> feature_probs_shaded_row;
+      
+    for (int shaded_count : shaded_counts_row) {
+      float prob_shaded = (shaded_count + kLaplace)
+                          / (class_number_count_ + (2 * kLaplace));
+        
+      feature_probs_shaded_row.push_back(prob_shaded);
+    }
+      
+    feature_probs_shaded_.push_back(feature_probs_shaded_row);
+  }
+}
+
 std::vector<Image> NumberClass::GetImages() const {
   return images_;
 }
@@ -45,8 +65,13 @@ int NumberClass::GetCount() const {
 int NumberClass::GetClassNumber() const {
   return class_number_;
 }
+
 std::vector<std::vector<int>> NumberClass::GetShadedCounts() const {
   return shaded_counts_;
+}
+
+std::vector<std::vector<float>> NumberClass::GetFeatureProbsShaded() const {
+  return feature_probs_shaded_;
 }
 
 } // namespace naivebayes

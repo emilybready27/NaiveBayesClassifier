@@ -1,13 +1,18 @@
 #pragma once
 
-#include "file_reader.h"
 #include "number_class.h"
+#include "file_reader.h"
+#include "file_writer.h"
 
 namespace naivebayes {
 
 class Model {
- public: 
+ public:
+  Model();
+  
   friend std::istream& operator>> (std::istream& in, Model& model);
+  
+  friend std::ostream& operator<< (std::ostream& out, Model& model);
   
   std::vector<std::vector<Image>> GetImages() const;
   
@@ -15,9 +20,8 @@ class Model {
   
   std::vector<float> GetPriorProbs() const;
   
-  std::vector<std::vector<float>> GetFeatureProbs0() const;
+  std::vector<std::vector<float>> GetFeatureProbsShaded(int class_number) const;
   
-  std::vector<std::vector<float>> GetFeatureProbs1() const;
   
  private:
   /**
@@ -26,9 +30,9 @@ class Model {
   FileReader file_reader_;
   
   /**
-   * Stores a list of the 10 different classes of numbers.
+   * Used to write to an output file to save for later.
    */
-  std::vector<NumberClass> number_classes_;
+//  FileWriter file_writer_;
   
   const float kLaplace = 1.0;
   
@@ -36,17 +40,22 @@ class Model {
   
   int total_image_count_;
   
+  int row_count_;
+  
+  int column_count_;
+  
+  /**
+   * Stores a list of the 10 different classes of numbers.
+   */
+  std::vector<NumberClass> number_classes_;
+  
   std::vector<float> prior_probs_;
-  
-  std::vector<std::vector<float>> feature_probs_0_;
-  
-  std::vector<std::vector<float>> feature_probs_1_;
   
   void ConstructNumberClasses(const std::vector<Image>& images);
   
   void ComputePriorProbs();
   
-  void ComputeFeatureProbs();
+  void ComputeFeatureProbsShaded();
 };
 
 
