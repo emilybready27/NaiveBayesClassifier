@@ -40,7 +40,7 @@ FetchContent_Declare(
 FetchContent_GetProperties(catch2)
 if(NOT catch2_POPULATED)
     FetchContent_Populate(catch2)
-    add_library(catch2 INTERFACE src/core/image.cc include/core/image.h tests/test_image.cc src/core/model.cc include/core/model.h)
+    add_library(catch2 INTERFACE src/core/image.cc include/core/image.h tests/test_image.cc src/core/model.cc include/core/model.h tests/test_model.cc src/core/number_class.cc include/core/number_class.h)
     target_include_directories(catch2 INTERFACE ${catch2_SOURCE_DIR}/single_include)
 endif()
 
@@ -51,13 +51,15 @@ include("${CINDER_PATH}/proj/cmake/modules/cinderMakeApp.cmake")
 
 list(APPEND CORE_SOURCE_FILES src/core/model.cc
                               src/core/file_reader.cc
-                              src/core/image.cc)
+                              src/core/image.cc
+                              src/core/number_class.cc)
 
 list(APPEND SOURCE_FILES    ${CORE_SOURCE_FILES}
                             src/visualizer/naive_bayes_app.cc
                             src/visualizer/sketchpad.cc)
 
-list(APPEND TEST_FILES tests/test_file_reader.cc
+list(APPEND TEST_FILES tests/test_model.cc
+                       tests/test_file_reader.cc
                        tests/test_image.cc)
 
 add_executable(train-model apps/train_model_main.cc ${CORE_SOURCE_FILES})

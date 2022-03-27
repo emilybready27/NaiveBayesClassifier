@@ -15,23 +15,6 @@ TEST_CASE("Test reading from data file") {
     REQUIRE(images.size() == 4);
   }
   
-  SECTION("Image 0 correct") {
-    std::vector<std::string> pixels = {
-        "          ",
-        "          ",
-        "          ",
-        "   +##+   ",
-        " +#+  +#+ ",
-        " +#+  +#+ ",
-        " +#+  +#+ ",
-        "   +##+   ",
-        "          ",
-        "          "
-    };
-    Image image_0 = Image(pixels, 0);
-    REQUIRE(images[0].GetPixels() == image_0.GetPixels());
-  }
-  
   SECTION("Image 1 correct") {
     std::vector<std::string> pixels = {
         "          ",
@@ -46,7 +29,7 @@ TEST_CASE("Test reading from data file") {
         "          "
     };
     Image image_1 = Image(pixels, 1);
-    REQUIRE(images[1].GetPixels() == image_1.GetPixels());
+    REQUIRE(images[0].GetPixels() == image_1.GetPixels());
   }
   
   SECTION("Image 2 correct") {
@@ -63,7 +46,7 @@ TEST_CASE("Test reading from data file") {
         "          "
     };
     Image image_2 = Image(pixels, 2);
-    REQUIRE(images[2].GetPixels() == image_2.GetPixels());
+    REQUIRE(images[1].GetPixels() == image_2.GetPixels());
   }
   
   SECTION("Image 3 correct") {
@@ -80,6 +63,23 @@ TEST_CASE("Test reading from data file") {
         "          "
     };
     Image image_3 = Image(pixels, 3);
-    REQUIRE(images[3].GetPixels() == image_3.GetPixels());
+    REQUIRE(images[2].GetPixels() == image_3.GetPixels());
+  }
+  
+  SECTION("Image 4 correct") {
+    std::vector<std::string> pixels = {
+        "          ",
+        "          ",
+        "          ",
+        "   +##+   ",
+        " +#+  +#+ ",
+        " +#+  +#+ ",
+        " +#+  +#+ ",
+        "   +##+   ",
+        "          ",
+        "          "
+    };
+    Image image_4 = Image(pixels, 0);
+    REQUIRE(images[3].GetPixels() == image_4.GetPixels());
   }
 }
