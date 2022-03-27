@@ -10,6 +10,8 @@ class Model {
  public:
   Model();
   
+  void Train();
+  
   friend std::istream& operator>> (std::istream& in, Model& model);
   
   friend std::ostream& operator<< (std::ostream& out, Model& model);

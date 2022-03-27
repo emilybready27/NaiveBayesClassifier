@@ -5,52 +5,44 @@ namespace naivebayes {
 NumberClass::NumberClass(int class_number) {
   class_number_ = class_number;
   class_number_count_ = 0;
+  row_count_ = 0;
+  column_count_ = 0;
 }
 
 void NumberClass::AddImage(const Image& image) {
   images_.push_back(image);
   class_number_count_++;
   
-  if (shaded_counts_.empty()) {
-    ConstructShadedCounts(image.GetNumberRows(),
-                          image.GetNumberColumns());
-  }
-  UpdateShadedCounts(image);
-}
-
-void NumberClass::ConstructShadedCounts(int number_rows, int number_columns) {
-  for (int i = 0; i < number_rows; i++) {
-    std::vector<int> shaded_counts_row(number_columns, 0);
-    shaded_counts_.emplace_back(shaded_counts_row);
-  }
-}
-
-void NumberClass::UpdateShadedCounts(const Image& image) {
-  for (int i = 0; i < image.GetNumberRows(); i++) {
-    for (int j = 0; j < image.GetNumberColumns(); j++) {
-      int color = image.GetPixelColor(i, j);
-      shaded_counts_[i][j] += color;
-    }
+  if (row_count_ == 0 && column_count_ == 0) {
+    row_count_ = image.GetNumberRows();
+    column_count_ = image.GetNumberColumns();
   }
 }
 
 void NumberClass::ComputeFeatureProbsShaded(float kLaplace) {
-  if (shaded_counts_.empty()) {
-    feature_probs_shaded_ = std::vector<std::vector<float>>(0);
-    return;
+  // initialize each element with additive kLaplace constant in numerators
+  for (int i = 0; i < row_count_; i++) {
+    std::vector<float> row(column_count_, kLaplace);
+    feature_probs_shaded_.emplace_back(row);
   }
   
-  for (const std::vector<int>& shaded_counts_row : shaded_counts_) {
-    std::vector<float> feature_probs_shaded_row;
-      
-    for (int shaded_count : shaded_counts_row) {
-      float prob_shaded = (shaded_count + kLaplace)
-                          / (class_number_count_ + (2 * kLaplace));
-        
-      feature_probs_shaded_row.push_back(prob_shaded);
+  // in this class, find total number of images where pixel i,j is shaded
+  // and store this in feature_probs_shaded_ to complete the numerators
+  for (const Image& image : images_) {
+    for (int i = 0; i < image.GetNumberRows(); i++) {
+      for (int j = 0; j < image.GetNumberColumns(); j++) {
+        int color = image.GetPixelColor(i, j); // 0 or 1
+        feature_probs_shaded_[i][j] += static_cast<float>(color);
+      }
     }
-      
-    feature_probs_shaded_.push_back(feature_probs_shaded_row);
+  }
+  
+  // divide each element of feature_probs_shaded_ by denominator
+  float denominator = static_cast<float>(class_number_count_) + (2 * kLaplace);
+  for (int i = 0; i < row_count_; i++) {
+    for (int j = 0; j < column_count_; j++) {
+      feature_probs_shaded_[i][j] /= denominator;
+    }
   }
 }
 
@@ -66,12 +58,16 @@ int NumberClass::GetClassNumber() const {
   return class_number_;
 }
 
-std::vector<std::vector<int>> NumberClass::GetShadedCounts() const {
-  return shaded_counts_;
-}
-
 std::vector<std::vector<float>> NumberClass::GetFeatureProbsShaded() const {
   return feature_probs_shaded_;
+}
+
+int NumberClass::GetRowCount() const {
+  return row_count_;
+}
+
+int NumberClass::GetColumnCount() const {
+  return column_count_;
 }
 
 } // namespace naivebayes

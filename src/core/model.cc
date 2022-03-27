@@ -7,14 +7,16 @@ namespace naivebayes {
 Model::Model() {
 }
 
+void Model::Train() {
+  ComputePriorProbs();
+  ComputeFeatureProbsShaded();
+}
+
 std::istream& operator>> (std::istream& input, Model& model) {
   model.file_reader_ = FileReader(input);
   std::vector<Image> images = model.file_reader_.GetImages();
 
   model.ConstructNumberClasses(images);
-  
-  model.ComputePriorProbs();
-  model.ComputeFeatureProbsShaded();
   
   return input;
 }
@@ -44,8 +46,8 @@ void Model::ConstructNumberClasses(const std::vector<Image>& images) {
     number_classes_[class_number].AddImage(image);
   }
   
-  row_count_ = images[0].GetNumberRows();
-  column_count_ = images[0].GetNumberColumns();
+  row_count_ = number_classes_[0].GetRowCount();
+  column_count_ = number_classes_[0].GetColumnCount();
 }
 
 void Model::ComputePriorProbs() {

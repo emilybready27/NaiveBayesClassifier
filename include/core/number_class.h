@@ -17,7 +17,9 @@ class NumberClass {
   
   int GetClassNumber() const;
   
-  std::vector<std::vector<int>> GetShadedCounts() const;
+  int GetRowCount() const;
+  
+  int GetColumnCount() const;
   
   void ComputeFeatureProbsShaded(float kLaplace);
   
@@ -28,15 +30,13 @@ class NumberClass {
   
   int class_number_count_;
   
+  int row_count_;
+  
+  int column_count_;
+  
   std::vector<Image> images_;
   
-  std::vector<std::vector<int>> shaded_counts_;
-  
   std::vector<std::vector<float>> feature_probs_shaded_;
-
-  void ConstructShadedCounts(int number_rows, int number_columns);
-  
-  void UpdateShadedCounts(const Image& image);
   
 };
 

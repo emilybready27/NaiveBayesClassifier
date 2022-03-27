@@ -12,30 +12,37 @@ int main() {
   // and saves the trained model to a file.
 
   Model model = Model();
-  std::string path_to_data = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\minitrainingimagesandlabels.txt)";
+  
+  // load in training data
+  std::string path_to_data = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\trainingimagesandlabels.txt)";
   std::ifstream data_file(path_to_data);
   data_file >> model;
   
-  std::string path_to_save = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\save_file.txt)";
+  model.Train();
+  
+  // save model in file
+  std::string path_to_save = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\save_file_2.txt)";
   std::ofstream save_file(path_to_save);
   save_file << model;
   
-  // load in save_file 
+  // load in saved model
+//  std::ifstream save_file_read(path_to_save);
+//  save_file_read >> model;
   
-//  for (size_t i = 0; i < 5; i++) {
+//  for (size_t i = 0; i < 10; i++) {
 //    for (size_t j = 0; j < 10; j++) {
 //      std::cout << " " << model.GetPriorProbs()[i];
 //    }
 //    std::cout << std::endl;
 //  }
-  
+//  
 //  for (size_t i = 0; i < 10; i++) {
-//    
+//
 //    if (model.GetClassNumberCounts()[i] == 0) {
 //      //std::cout << std::endl;
 //      continue;
 //    }
-//    
+//
 //    for (size_t j = 0; j < 10; j++) {
 //      for (size_t k = 0; k < 10; k++) {
 //        if (model.GetFeatureProbsShaded(i)[j][k] <= 0.34) {
