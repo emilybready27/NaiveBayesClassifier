@@ -7,19 +7,24 @@
 using naivebayes::Model;
 
 // TODO: You may want to change main's signature to take in argc and argv
-int main() {
-
+int main(int argc, char** argv) {
+  if (argc != 3) {
+    std::cout << "Usage: ./train_model path-to-data path-to-save";
+    return 1;
+  }
+  
+  std::string path_to_data = argv[1];
+  std::string path_to_save = argv[2];
+  
   Model model = Model();
   
   // load in training data
-  std::string path_to_data = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\minitrainingimagesandlabels.txt)";
   std::ifstream data_file(path_to_data);
   data_file >> model;
 
   model.Train();
 
   // save model in file
-  std::string path_to_save = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\minisave_file.txt)";
   std::ofstream save_file(path_to_save);
   save_file << model;
   
