@@ -1,7 +1,7 @@
 #pragma once
 
 #include <fstream>
-#include "file_writer.h"
+#include "number_class.h"
 
 namespace naivebayes {
 
@@ -9,7 +9,14 @@ class FileWriter {
  public:
   FileWriter() = default;
   
-//  FileWriter(std::ostream& output, std::string str);
+  FileWriter(std::ostream& output,
+             const std::vector<NumberClass>& number_classes,
+             const std::vector<float>& prior_probs,
+             float kLaplace,
+             int kNumberClasses,
+             int total_image_count,
+             int row_count,
+             int column_count);
 };
 
 //template<class T>

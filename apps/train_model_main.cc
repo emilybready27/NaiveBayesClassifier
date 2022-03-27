@@ -30,6 +30,12 @@ int main() {
 //  }
   
 //  for (size_t i = 0; i < 10; i++) {
+//    
+//    if (model.GetClassNumberCounts()[i] == 0) {
+//      //std::cout << std::endl;
+//      continue;
+//    }
+//    
 //    for (size_t j = 0; j < 10; j++) {
 //      for (size_t k = 0; k < 10; k++) {
 //        if (model.GetFeatureProbsShaded(i)[j][k] <= 0.34) {

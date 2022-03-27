@@ -32,7 +32,7 @@ class Model {
   /**
    * Used to write to an output file to save for later.
    */
-//  FileWriter file_writer_;
+  FileWriter file_writer_;
   
   const float kLaplace = 1.0;
   

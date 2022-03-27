@@ -20,7 +20,14 @@ std::istream& operator>> (std::istream& input, Model& model) {
 }
 
 std::ostream& operator<< (std::ostream& output, Model& model) {
-//  model.file_writer_ = FileWriter(output, "save");
+  model.file_writer_ = FileWriter(output,
+                                model.number_classes_,
+                                model.prior_probs_,
+                                model.kLaplace,
+                                model.kNumberClasses,
+                                model.total_image_count_,
+                                model.row_count_,
+                                model.column_count_);
   return output;
 }
 
@@ -81,10 +88,6 @@ std::vector<float> Model::GetPriorProbs() const {
 
 std::vector<std::vector<float>>
 Model::GetFeatureProbsShaded(int class_number) const {
-  if (number_classes_[class_number].GetFeatureProbsShaded().empty()) {
-    std::vector<float> row(column_count_, 0.0);
-    return std::vector<std::vector<float>>(row_count_, row);
-  }
   return number_classes_[class_number].GetFeatureProbsShaded();
 }
 
