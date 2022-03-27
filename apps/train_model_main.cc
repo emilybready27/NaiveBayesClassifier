@@ -8,38 +8,35 @@ using naivebayes::Model;
 
 // TODO: You may want to change main's signature to take in argc and argv
 int main() {
-  // TODO: Replace this with code that reads the training data, trains a model,
-  // and saves the trained model to a file.
 
   Model model = Model();
   
   // load in training data
-//  std::string path_to_data = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\minitrainingimagesandlabels.txt)";
-//  std::ifstream data_file(path_to_data);
-//  data_file >> model;
-//
-//  model.Train();
-  
+  std::string path_to_data = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\minitrainingimagesandlabels.txt)";
+  std::ifstream data_file(path_to_data);
+  data_file >> model;
+
+  model.Train();
+
   // save model in file
   std::string path_to_save = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\minisave_file.txt)";
-//  std::ofstream save_file(path_to_save);
-//  save_file << model;
+  std::ofstream save_file(path_to_save);
+  save_file << model;
   
   // load in saved model
   std::ifstream save_file_read(path_to_save);
   save_file_read >> model;
   
-//  for (size_t i = 0; i < 10; i++) {
-//    for (size_t j = 0; j < 10; j++) {
-//      std::cout << " " << model.GetPriorProbs()[i];
-//    }
-//    std::cout << std::endl;
-//  }
+  for (size_t i = 0; i < 10; i++) {
+    for (size_t j = 0; j < 10; j++) {
+      std::cout << " " << model.GetPriorProbs()[i];
+    }
+    std::cout << std::endl;
+  }
 
   for (size_t i = 0; i < 10; i++) {
 
     if (model.GetClassNumberCounts()[i] == 0) {
-      //std::cout << std::endl;
       continue;
     }
 
@@ -48,9 +45,8 @@ int main() {
         if (model.GetFeatureProbsShaded(i)[j][k] <= 0.34) {
           std::cout << " " << " ";
         } else {
-          std::cout << " " << 1;
+          std::cout << " " << i;
         }
-        //std::cout << " " << model.GetFeatureProbs1()[i][j];
       }
       std::cout << std::endl;
     }

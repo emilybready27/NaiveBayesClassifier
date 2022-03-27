@@ -38,7 +38,7 @@ class Model {
   
   const float kLaplace = 1.0;
   
-  const int kNumberClasses = 10;
+  const int kClassCount = 10;
   
   int total_image_count_;
   

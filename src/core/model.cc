@@ -37,17 +37,17 @@ std::ostream& operator<< (std::ostream& output, Model& model) {
 }
 
 void Model::ConstructSavedModel(const FileReader::FauxModel& faux_model) {
-  total_image_count_ = faux_model.total_image_count_;
-  row_count_ = faux_model.row_count_;
-  column_count_ = faux_model.column_count_;
-  number_classes_ = faux_model.number_classes_;
-  prior_probs_ = faux_model.prior_probs_;
+  total_image_count_ = faux_model.total_image_count;
+  row_count_ = faux_model.row_count;
+  column_count_ = faux_model.column_count;
+  number_classes_ = faux_model.number_classes;
+  ComputePriorProbs();
 }
 
 
 void Model::ConstructNumberClasses(const std::vector<Image>& images) {
   // initialize number classes
-  for (int i = 0; i < kNumberClasses; i++) {
+  for (int i = 0; i < kClassCount; i++) {
     number_classes_.emplace_back(i);
   }
   
@@ -68,7 +68,7 @@ void Model::ComputePriorProbs() {
   
   for (const int class_number_count : class_number_counts) {
     float prob = (class_number_count + kLaplace)
-                 / (total_image_count_ + (kNumberClasses * kLaplace));
+                 / (total_image_count_ + (kClassCount * kLaplace));
     prior_probs_.push_back(prob);
   }
 }

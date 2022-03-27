@@ -7,6 +7,7 @@ NumberClass::NumberClass(int class_number) {
   class_number_count_ = 0;
   row_count_ = 0;
   column_count_ = 0;
+  ResetFeatureProbsShaded(0);
 }
 
 void NumberClass::AddImage(const Image& image) {
@@ -21,16 +22,13 @@ void NumberClass::AddImage(const Image& image) {
 
 void NumberClass::ComputeFeatureProbsShaded(float kLaplace) {
   // initialize each element with additive kLaplace constant in numerators
-  for (int i = 0; i < row_count_; i++) {
-    std::vector<float> row(column_count_, kLaplace);
-    feature_probs_shaded_.emplace_back(row);
-  }
+  ResetFeatureProbsShaded(kLaplace);
   
   // in this class, find total number of images where pixel i,j is shaded
   // and store this in feature_probs_shaded_ to complete the numerators
   for (const Image& image : images_) {
-    for (int i = 0; i < image.GetNumberRows(); i++) {
-      for (int j = 0; j < image.GetNumberColumns(); j++) {
+    for (int i = 0; i < row_count_; i++) {
+      for (int j = 0; j < column_count_; j++) {
         int color = image.GetPixelColor(i, j); // 0 or 1
         feature_probs_shaded_[i][j] += static_cast<float>(color);
       }
