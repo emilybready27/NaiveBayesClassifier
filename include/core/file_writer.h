@@ -12,8 +12,6 @@ class FileWriter {
   FileWriter(std::ostream& output,
              const std::vector<NumberClass>& number_classes,
              const std::vector<float>& prior_probs,
-             float kLaplace,
-             int kNumberClasses,
              int total_image_count,
              int row_count,
              int column_count);

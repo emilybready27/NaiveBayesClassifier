@@ -14,20 +14,20 @@ int main() {
   Model model = Model();
   
   // load in training data
-  std::string path_to_data = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\trainingimagesandlabels.txt)";
-  std::ifstream data_file(path_to_data);
-  data_file >> model;
-  
-  model.Train();
+//  std::string path_to_data = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\minitrainingimagesandlabels.txt)";
+//  std::ifstream data_file(path_to_data);
+//  data_file >> model;
+//
+//  model.Train();
   
   // save model in file
-  std::string path_to_save = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\save_file_2.txt)";
-  std::ofstream save_file(path_to_save);
-  save_file << model;
+  std::string path_to_save = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\minisave_file.txt)";
+//  std::ofstream save_file(path_to_save);
+//  save_file << model;
   
   // load in saved model
-//  std::ifstream save_file_read(path_to_save);
-//  save_file_read >> model;
+  std::ifstream save_file_read(path_to_save);
+  save_file_read >> model;
   
 //  for (size_t i = 0; i < 10; i++) {
 //    for (size_t j = 0; j < 10; j++) {
@@ -35,27 +35,27 @@ int main() {
 //    }
 //    std::cout << std::endl;
 //  }
-//  
-//  for (size_t i = 0; i < 10; i++) {
-//
-//    if (model.GetClassNumberCounts()[i] == 0) {
-//      //std::cout << std::endl;
-//      continue;
-//    }
-//
-//    for (size_t j = 0; j < 10; j++) {
-//      for (size_t k = 0; k < 10; k++) {
-//        if (model.GetFeatureProbsShaded(i)[j][k] <= 0.34) {
-//          std::cout << " " << " ";
-//        } else {
-//          std::cout << " " << 1;
-//        }
-//        //std::cout << " " << model.GetFeatureProbs1()[i][j];
-//      }
-//      std::cout << std::endl;
-//    }
-//    std::cout << std::endl;
-//  }
+
+  for (size_t i = 0; i < 10; i++) {
+
+    if (model.GetClassNumberCounts()[i] == 0) {
+      //std::cout << std::endl;
+      continue;
+    }
+
+    for (size_t j = 0; j < 10; j++) {
+      for (size_t k = 0; k < 10; k++) {
+        if (model.GetFeatureProbsShaded(i)[j][k] <= 0.34) {
+          std::cout << " " << " ";
+        } else {
+          std::cout << " " << 1;
+        }
+        //std::cout << " " << model.GetFeatureProbs1()[i][j];
+      }
+      std::cout << std::endl;
+    }
+    std::cout << std::endl;
+  }
   
   return 0;
 }

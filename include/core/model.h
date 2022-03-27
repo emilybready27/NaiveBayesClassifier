@@ -53,11 +53,14 @@ class Model {
   
   std::vector<float> prior_probs_;
   
+  void ConstructSavedModel(const FileReader::FauxModel& faux_model);
+  
   void ConstructNumberClasses(const std::vector<Image>& images);
   
   void ComputePriorProbs();
   
   void ComputeFeatureProbsShaded();
+  
 };
 
 

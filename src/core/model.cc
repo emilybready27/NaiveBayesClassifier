@@ -14,9 +14,14 @@ void Model::Train() {
 
 std::istream& operator>> (std::istream& input, Model& model) {
   model.file_reader_ = FileReader(input);
-  std::vector<Image> images = model.file_reader_.GetImages();
-
-  model.ConstructNumberClasses(images);
+  
+  if (model.file_reader_.IsSaveFile()) {
+    const FileReader::FauxModel& faux_model = model.file_reader_.GetFauxModel();
+    model.ConstructSavedModel(faux_model);
+  } else {
+    std::vector<Image> images = model.file_reader_.GetData();
+    model.ConstructNumberClasses(images);
+  }
   
   return input;
 }
@@ -25,12 +30,18 @@ std::ostream& operator<< (std::ostream& output, Model& model) {
   model.file_writer_ = FileWriter(output,
                                 model.number_classes_,
                                 model.prior_probs_,
-                                model.kLaplace,
-                                model.kNumberClasses,
                                 model.total_image_count_,
                                 model.row_count_,
                                 model.column_count_);
   return output;
+}
+
+void Model::ConstructSavedModel(const FileReader::FauxModel& faux_model) {
+  total_image_count_ = faux_model.total_image_count_;
+  row_count_ = faux_model.row_count_;
+  column_count_ = faux_model.column_count_;
+  number_classes_ = faux_model.number_classes_;
+  prior_probs_ = faux_model.prior_probs_;
 }
 
 
@@ -79,7 +90,7 @@ std::vector<std::vector<Image>> Model::GetImages() const {
 std::vector<int> Model::GetClassNumberCounts() const {
   std::vector<int> class_number_counts;
   for (const NumberClass& number_class : number_classes_) {
-    class_number_counts.push_back(number_class.GetCount());
+    class_number_counts.push_back(number_class.GetClassNumberCount());
   }
   return class_number_counts;
 }

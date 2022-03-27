@@ -50,7 +50,11 @@ std::vector<Image> NumberClass::GetImages() const {
   return images_;
 }
 
-int NumberClass::GetCount() const {
+void NumberClass::SetClassNumberCount(int count) {
+  class_number_count_ = count;
+}
+
+int NumberClass::GetClassNumberCount() const {
   return class_number_count_;
 }
 
@@ -68,6 +72,33 @@ int NumberClass::GetRowCount() const {
 
 int NumberClass::GetColumnCount() const {
   return column_count_;
+}
+
+void NumberClass::ResetFeatureProbsShaded(float reset_value) {
+  std::vector<std::vector<float>> new_matrix;
+  for (int i = 0; i < row_count_; i++) {
+    std::vector<float> row(column_count_, reset_value);
+    new_matrix.emplace_back(row);
+  }
+  feature_probs_shaded_ = new_matrix;
+}
+
+void NumberClass::SetFeatureProbsShaded(
+    const std::vector<std::vector<float>>& matrix) {
+  
+  ResetFeatureProbsShaded(0);
+  for (int i = 0; i < row_count_; i++) {
+    const std::vector<float>& row = matrix[i];
+    feature_probs_shaded_[i] = row;
+  }
+}
+
+void NumberClass::SetColumnCount(int count) {
+  column_count_ = count;
+}
+
+void NumberClass::SetRowCount(int count) {
+  row_count_ = count;
 }
 
 } // namespace naivebayes

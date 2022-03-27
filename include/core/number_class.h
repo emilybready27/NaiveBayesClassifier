@@ -13,15 +13,25 @@ class NumberClass {
   
   std::vector<Image> GetImages() const;
   
-  int GetCount() const;
+  void SetClassNumberCount(int count);
+  
+  int GetClassNumberCount() const;
   
   int GetClassNumber() const;
   
+  void SetRowCount(int count);
+  
   int GetRowCount() const;
+  
+  void SetColumnCount(int count);
   
   int GetColumnCount() const;
   
   void ComputeFeatureProbsShaded(float kLaplace);
+  
+  void ResetFeatureProbsShaded(float reset_value);
+  
+  void SetFeatureProbsShaded(const std::vector<std::vector<float>>& matrix);
   
   std::vector<std::vector<float>> GetFeatureProbsShaded() const;
   
