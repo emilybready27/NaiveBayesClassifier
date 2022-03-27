@@ -19,6 +19,7 @@ std::vector<Image> NumberClass::GetImages() const {
 int NumberClass::GetCount() const {
   return class_number_count_;
 }
+
 int NumberClass::GetClassNumber() const {
   return class_number_;
 }
