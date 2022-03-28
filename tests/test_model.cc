@@ -6,6 +6,7 @@
 using naivebayes::Model;
 
 const std::string path_to_data = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\minitrainingimagesandlabels.txt)";
+const std::string path_to_data_2 = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\trainingimagesandlabels.txt)";
 const std::string path_to_save = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\mini_save_file.txt)";
 
 TEST_CASE("Test extraction operator overload with data file") {
@@ -164,3 +165,35 @@ TEST_CASE("Test feature probability computation") {
   }
 
 }
+
+TEST_CASE("Test loading training images") {
+  Model model = Model();
+  std::ifstream data_file(path_to_data_2);
+  data_file >> model;
+  model.Train();
+  
+  SECTION("Correct total image count") {
+    REQUIRE(model.GetTotalImageCount() == 5000);
+  }
+  
+  SECTION("Correct row count") {
+    REQUIRE(model.GetRowCount() == 28);
+  }
+  
+  SECTION("Correct column count") {
+    REQUIRE(model.GetColumnCount() == 28);
+  }
+  
+  SECTION("Correct number of NumberClasses") {
+    REQUIRE(model.GetNumberClasses().size() == 10);
+  }
+  
+  SECTION("Correct number class counts") {
+    std::vector<int> counts = {
+      479, 563, 488, 493, 535, 434, 501, 550, 462, 495
+    };
+    REQUIRE(model.GetClassNumberCounts() == counts);
+  }
+  
+  
+} 
