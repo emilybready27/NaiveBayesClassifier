@@ -8,8 +8,8 @@ using naivebayes::Image;
 TEST_CASE("Test reading from data file") {
   std::string path_to_data = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\minitrainingimagesandlabels.txt)";
   std::ifstream data_file(path_to_data);
-  FileReader file_handler = FileReader(data_file);
-  std::vector<Image> images = file_handler.GetData();
+  FileReader file_reader = FileReader(data_file);
+  std::vector<Image> images = file_reader.GetData();
 
   SECTION("Correct vector size") {
     REQUIRE(images.size() == 4);

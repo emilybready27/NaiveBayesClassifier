@@ -16,6 +16,8 @@ class Model {
   
   friend std::ostream& operator<< (std::ostream& out, Model& model);
   
+  int GetTotalImageCount() const;
+  
   std::vector<std::vector<Image>> GetImages() const;
   
   std::vector<int> GetClassNumberCounts() const;

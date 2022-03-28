@@ -79,6 +79,10 @@ void Model::ComputeFeatureProbsShaded() {
   }
 }
 
+int Model::GetTotalImageCount() const {
+  return total_image_count_;
+}
+
 std::vector<std::vector<Image>> Model::GetImages() const {
   std::vector<std::vector<Image>> images;
   for (const NumberClass& number_class : number_classes_) {

@@ -6,7 +6,6 @@
 
 using naivebayes::Model;
 
-// TODO: You may want to change main's signature to take in argc and argv
 int main(int argc, char** argv) {
   if (argc != 3) {
     std::cout << "Usage: ./train_model path-to-data path-to-save";
@@ -32,26 +31,25 @@ int main(int argc, char** argv) {
   std::ifstream save_file_read(path_to_save);
   save_file_read >> model;
   
+
   for (size_t i = 0; i < 10; i++) {
-    for (size_t j = 0; j < 10; j++) {
-      std::cout << " " << model.GetPriorProbs()[i];
-    }
-    std::cout << std::endl;
+    std::cout << model.GetPriorProbs()[i] << std::endl;
   }
+  std::cout << std::endl;
 
   for (size_t i = 0; i < 10; i++) {
-
     if (model.GetClassNumberCounts()[i] == 0) {
       continue;
     }
 
     for (size_t j = 0; j < 10; j++) {
       for (size_t k = 0; k < 10; k++) {
-        if (model.GetFeatureProbsShaded(i)[j][k] <= 0.34) {
-          std::cout << " " << " ";
-        } else {
-          std::cout << " " << i;
-        }
+//        if (model.GetFeatureProbsShaded(i)[j][k] <= 0.3) {
+//          std::cout << " " << " ";
+//        } else {
+//          std::cout << " " << i;
+//        }
+        std::cout << model.GetFeatureProbsShaded(i)[j][k] << " ";
       }
       std::cout << std::endl;
     }
