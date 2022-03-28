@@ -143,6 +143,7 @@ std::vector<Image> FileReader::GetData() const {
 }
 
 FileReader::FauxModel FileReader::GetFauxModel() const {
+  // TODO: throw invalid_argument_exception
   return faux_model_;
 }
 

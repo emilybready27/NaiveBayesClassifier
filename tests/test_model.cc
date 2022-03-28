@@ -4,7 +4,6 @@
 #include <core/image.h>
 
 using naivebayes::Model;
-using namespace Catch::literals;
 
 const std::string path_to_data = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\minitrainingimagesandlabels.txt)";
 const std::string path_to_save = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\mini_save_file.txt)";
@@ -31,35 +30,37 @@ TEST_CASE("Test extraction operator overload with data file") {
 }
 
 TEST_CASE("Test extraction operator overload with save file") {
-  Model model1 = Model();
-  std::ifstream data_file(path_to_data);
-  data_file >> model1;
-  model1.Train();
-  
-  Model model2 = Model();
+  Model model = Model();
   std::ifstream save_file_read(path_to_save);
-  save_file_read >> model2;
+  save_file_read >> model;
   
-  SECTION("Two models have same total image count") {
-    REQUIRE(model1.GetTotalImageCount() == model2.GetTotalImageCount());
+  SECTION("Total image count derived correctly") {
+    REQUIRE(model.GetTotalImageCount() == 4);
   }
   
-  SECTION("Two models have same class number counts") {
-    REQUIRE(model1.GetClassNumberCounts() == model2.GetClassNumberCounts());
+  SECTION("Class number counts derived correctly") {
+    std::vector<int> class_number_counts = {1, 1, 1, 1, 0, 0, 0, 0, 0, 0};
+    REQUIRE(model.GetClassNumberCounts() == class_number_counts);
   }
   
-  SECTION("Two models have save prior probabilities") {
-    REQUIRE(model1.GetPriorProbs() == model2.GetPriorProbs());
+  SECTION("Prior probability derived correctly for class 0") {
+    REQUIRE(model.GetPriorProbs()[0] == Approx(0.142857));
   }
   
-  SECTION("Two models have feature probs shaded for class 0") {
-    REQUIRE(model1.GetFeatureProbsShaded(0)[0][0]
-            == Approx(model2.GetFeatureProbsShaded(0)[0][0]));
+  SECTION("Prior probability derived correctly for class 5") {
+    REQUIRE(model.GetPriorProbs()[5] == Approx(0.0714286));
   }
   
-  SECTION("Two models have feature probs shaded for class 5") {
-    REQUIRE(model1.GetFeatureProbsShaded(5)
-            == model2.GetFeatureProbsShaded(5));
+  SECTION("Feature probability derived correctly for shaded class 0") {
+    REQUIRE(model.GetFeatureProbsShaded(0)[0][0] == Approx(0.333333));
+  }
+  
+  SECTION("Feature probability derived correctly for unshaded for class 0") {
+    REQUIRE(1 - model.GetFeatureProbsShaded(0)[0][0] == Approx(0.666667));
+  }
+  
+  SECTION("Feature probability derived correctly for class 5") {
+    REQUIRE(model.GetFeatureProbsShaded(5).empty() == true);
   }
 }
 
