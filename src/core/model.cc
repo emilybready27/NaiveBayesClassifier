@@ -29,7 +29,6 @@ std::istream& operator>> (std::istream& input, Model& model) {
 std::ostream& operator<< (std::ostream& output, Model& model) {
   model.file_writer_ = FileWriter(output,
                                 model.number_classes_,
-                                model.prior_probs_,
                                 model.total_image_count_,
                                 model.row_count_,
                                 model.column_count_);
@@ -83,6 +82,14 @@ int Model::GetTotalImageCount() const {
   return total_image_count_;
 }
 
+int Model::GetRowCount() const {
+  return row_count_;
+}
+
+int Model::GetColumnCount() const {
+  return column_count_;
+}
+
 std::vector<std::vector<Image>> Model::GetImages() const {
   std::vector<std::vector<Image>> images;
   for (const NumberClass& number_class : number_classes_) {
@@ -97,6 +104,10 @@ std::vector<int> Model::GetClassNumberCounts() const {
     class_number_counts.push_back(number_class.GetClassNumberCount());
   }
   return class_number_counts;
+}
+
+std::vector<NumberClass> Model::GetNumberClasses() const {
+  return number_classes_;
 }
 
 std::vector<float> Model::GetPriorProbs() const {

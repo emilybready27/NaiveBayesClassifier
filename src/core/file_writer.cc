@@ -6,7 +6,6 @@ namespace naivebayes {
 
 FileWriter::FileWriter(std::ostream& output,
                        const std::vector<NumberClass>& number_classes,
-                       const std::vector<float>& prior_probs,
                        int total_image_count,
                        int row_count,
                        int column_count) {
@@ -32,14 +31,5 @@ FileWriter::FileWriter(std::ostream& output,
     }
   }
 }
-
-//template<class T>
-//std::string ToString(std::vector<T> vector) {
-//  std::string str;
-//  for (int i = 0; i < vector.size(); i++) {
-//    str += std::to_string(vector[i]) + " ";
-//  }
-//  return str;
-//}
 
 } // namespace naivebayes

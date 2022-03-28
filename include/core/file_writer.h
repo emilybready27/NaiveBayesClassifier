@@ -11,13 +11,9 @@ class FileWriter {
   
   FileWriter(std::ostream& output,
              const std::vector<NumberClass>& number_classes,
-             const std::vector<float>& prior_probs,
              int total_image_count,
              int row_count,
              int column_count);
 };
-
-//template<class T>
-//std::string ToString(const std::vector<T>& vector);
 
 } // namespace naivebayes
