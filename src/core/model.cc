@@ -5,6 +5,7 @@
 namespace naivebayes {
 
 Model::Model() {
+  total_class_count_ = 0;
 }
 
 void Model::Train() {
@@ -20,6 +21,7 @@ std::istream& operator>> (std::istream& input, Model& model) {
     model.ConstructSavedModel(faux_model);
   } else {
     std::vector<Image> images = model.file_reader_.GetData();
+    model.SetClassNumberCounts(images);
     model.ConstructNumberClasses(images);
   }
   
@@ -28,26 +30,50 @@ std::istream& operator>> (std::istream& input, Model& model) {
 
 std::ostream& operator<< (std::ostream& output, Model& model) {
   model.file_writer_ = FileWriter(output,
-                                model.number_classes_,
-                                model.total_image_count_,
-                                model.row_count_,
-                                model.column_count_);
+                                  model.kLaplace,
+                                  model.kMaxClassCount,
+                                  model.total_class_count_,
+                                  model.total_image_count_,
+                                  model.row_count_,
+                                  model.column_count_,
+                                  model.class_number_counts_,
+                                  model.number_classes_,
+                                  model.prior_probs_);
   return output;
 }
 
 void Model::ConstructSavedModel(const FileReader::FauxModel& faux_model) {
+  total_class_count_ = faux_model.total_class_count;
   total_image_count_ = faux_model.total_image_count;
   row_count_ = faux_model.row_count;
   column_count_ = faux_model.column_count;
+  class_number_counts_ = faux_model.class_number_counts;
   number_classes_ = faux_model.number_classes;
-  ComputePriorProbs();
+  prior_probs_ = faux_model.prior_probs;
+}
+
+void Model::SetClassNumberCounts(const std::vector<Image>& images) {
+  class_number_counts_ = std::vector<int>(kMaxClassCount, 0);
+  for (const Image& image : images) {
+    int class_number = image.GetClassNumber();
+    class_number_counts_[class_number]++;
+  }
+  
+  for (const int class_number_count : class_number_counts_) {
+    if (class_number_count > 0) {
+      total_class_count_++;
+    }
+  }
 }
 
 
 void Model::ConstructNumberClasses(const std::vector<Image>& images) {
   // initialize number classes
-  for (int i = 0; i < kClassCount; i++) {
-    number_classes_.emplace_back(i);
+  for (int i = 0; i < kMaxClassCount; i++) {
+    // only build non-empty number classes
+    if (class_number_counts_[i] != 0) {
+      number_classes_.emplace_back(i);
+    }
   }
   
   for (const Image& image : images) {
@@ -61,14 +87,16 @@ void Model::ConstructNumberClasses(const std::vector<Image>& images) {
 }
 
 void Model::ComputePriorProbs() {
-  std::vector<int> class_number_counts = GetClassNumberCounts();
-  total_image_count_ = std::accumulate(class_number_counts.begin(),
-                                       class_number_counts.end(), 0);
+  total_image_count_ = std::accumulate(class_number_counts_.begin(),
+                                       class_number_counts_.end(), 0);
   
-  for (const int class_number_count : class_number_counts) {
-    float prob = (class_number_count + kLaplace)
-                 / (total_image_count_ + (kClassCount * kLaplace));
-    prior_probs_.push_back(prob);
+  for (const int class_number_count : class_number_counts_) {
+    // only compute prior probability for non-empty classes
+    if (class_number_count != 0) {
+      float prob = (class_number_count + kLaplace) /
+                   (total_image_count_ + (total_class_count_ * kLaplace));
+      prior_probs_.push_back(prob);
+    }
   }
 }
 
@@ -76,6 +104,10 @@ void Model::ComputeFeatureProbsShaded() {
   for (NumberClass& number_class : number_classes_) {
     number_class.ComputeFeatureProbsShaded(kLaplace);
   }
+}
+
+int Model::GetTotalClassCount() const {
+  return total_class_count_;
 }
 
 int Model::GetTotalImageCount() const {
@@ -99,11 +131,7 @@ std::vector<std::vector<Image>> Model::GetImages() const {
 }
 
 std::vector<int> Model::GetClassNumberCounts() const {
-  std::vector<int> class_number_counts;
-  for (const NumberClass& number_class : number_classes_) {
-    class_number_counts.push_back(number_class.GetClassNumberCount());
-  }
-  return class_number_counts;
+  return class_number_counts_;
 }
 
 std::vector<NumberClass> Model::GetNumberClasses() const {

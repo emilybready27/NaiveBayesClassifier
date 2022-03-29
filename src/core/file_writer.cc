@@ -5,17 +5,35 @@
 namespace naivebayes {
 
 FileWriter::FileWriter(std::ostream& output,
-                       const std::vector<NumberClass>& number_classes,
+                       float k_laplace,
+                       int k_max_class_count,
+                       int total_class_count,
                        int total_image_count,
                        int row_count,
-                       int column_count) {
+                       int column_count,
+                       const std::vector<int>& class_number_counts,
+                       const std::vector<NumberClass>& number_classes,
+                       const std::vector<float>& prior_probs) {
   output << "save" << std::endl;
   
+  output << k_laplace << std::endl;
+  output << k_max_class_count << std::endl;
+  output << total_class_count << std::endl;
   output << total_image_count << std::endl;
   output << row_count << std::endl;
   output << column_count << std::endl;
   
-  for (NumberClass number_class : number_classes) {
+  for (const int count : class_number_counts) {
+    output << count << " ";
+  }
+  output << std::endl;
+  
+  for (const float prob : prior_probs) {
+    output << prob << " ";
+  }
+  output << std::endl;
+  
+  for (const NumberClass& number_class : number_classes) {
     output << number_class.GetClassNumber() << std::endl;
     output << number_class.GetClassNumberCount() << std::endl;
     

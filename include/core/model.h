@@ -18,6 +18,8 @@ class Model {
   
   int GetTotalImageCount() const;
   
+  int GetTotalClassCount() const;
+  
   int GetRowCount() const;
   
   int GetColumnCount() const;
@@ -46,13 +48,17 @@ class Model {
   
   const float kLaplace = 1.0;
   
-  const int kClassCount = 10;
+  const int kMaxClassCount = 10;
+  
+  int total_class_count_;
   
   int total_image_count_;
   
   int row_count_;
   
   int column_count_;
+  
+  std::vector<int> class_number_counts_;
   
   /**
    * Stores a list of the 10 different classes of numbers.
@@ -63,12 +69,13 @@ class Model {
   
   void ConstructSavedModel(const FileReader::FauxModel& faux_model);
   
+  void SetClassNumberCounts(const std::vector<Image>& images);
+  
   void ConstructNumberClasses(const std::vector<Image>& images);
   
   void ComputePriorProbs();
   
   void ComputeFeatureProbsShaded();
-  
 };
 
 

@@ -1,8 +1,10 @@
 #include <core/file_reader.h>
+#include <vector>
 #include <string>
 #include <sstream>
 #include <iterator>
 #include <algorithm>
+#include <map>
 
 namespace naivebayes {
 
@@ -20,11 +22,41 @@ void FileReader::ReadSaveFile(std::istream& input) {
   std::getline(input, line); // skip over "save" line
 
   std::getline(input, line);
+  faux_model_.k_laplace = std::stof(line);
+  std::getline(input, line);
+  faux_model_.k_max_class_count = std::stoi(line);
+  std::getline(input, line);
+  faux_model_.total_class_count = std::stoi(line);
+  std::getline(input, line);
   faux_model_.total_image_count = std::stoi(line);
   std::getline(input, line);
   faux_model_.row_count = std::stoi(line);
   std::getline(input, line);
   faux_model_.column_count = std::stoi(line);
+  
+  std::getline(input, line);
+  std::stringstream ss(line);
+  std::istream_iterator<std::string> begin(ss);
+  std::istream_iterator<std::string> end;
+  std::vector<std::string> counts(begin, end);
+  faux_model_.class_number_counts = std::vector<int>(counts.size());
+  std::transform(counts.begin(),
+                 counts.end(),
+                 faux_model_.class_number_counts.begin(),
+                 [](const std::string& val) {
+                   return std::stoi(val); });
+  
+  std::getline(input, line);
+  std::stringstream sss(line);
+  std::istream_iterator<std::string> begins(sss);
+  std::istream_iterator<std::string> ends;
+  std::vector<std::string> probs(begins, ends);
+  faux_model_.prior_probs = std::vector<float>(probs.size());
+  std::transform(probs.begin(),
+                 probs.end(),
+                 faux_model_.prior_probs.begin(),
+                 [](const std::string& val) {
+                   return std::stof(val); });
   
   // store vector of NumberClasses
   bool new_class = true;
@@ -85,8 +117,6 @@ void FileReader::ReadDataFile(std::istream& input) {
   int class_number = 0; // update for each new image
   std::vector<std::vector<char>> pixels;
 
-  // start from beginning of file again
-  input.seekg(0);
   std::string line;
   while (std::getline(input, line)) {
     // reached class number line
@@ -123,6 +153,8 @@ int FileReader::ReadDataFileRows(std::istream& input) {
     }
     row_iterator++;
   }
+  
+  input.seekg(0); // set iterator to beginning of file again
   return num_rows;
 }
 

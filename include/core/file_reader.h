@@ -17,10 +17,15 @@ class FileReader {
   std::vector<Image> GetData() const;
   
   struct FauxModel {
+    float k_laplace;
+    int k_max_class_count;
+    int total_class_count;
     int total_image_count;
     int row_count;
     int column_count;
+    std::vector<int> class_number_counts;
     std::vector<NumberClass> number_classes;
+    std::vector<float> prior_probs;
   };
   
   FauxModel GetFauxModel() const;
