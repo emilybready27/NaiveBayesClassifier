@@ -35,6 +35,4 @@ TEST_CASE("Test shaded feature probability computation") {
   SECTION("Fifth row") {
     REQUIRE(number_class.GetFeatureProbsShaded()[4][4] == Approx(0.33333));
   }
-  
-  
 }

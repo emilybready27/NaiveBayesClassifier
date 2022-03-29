@@ -4,7 +4,6 @@
 #include <sstream>
 #include <iterator>
 #include <algorithm>
-#include <map>
 
 namespace naivebayes {
 
@@ -35,28 +34,10 @@ void FileReader::ReadSaveFile(std::istream& input) {
   faux_model_.column_count = std::stoi(line);
   
   std::getline(input, line);
-  std::stringstream ss(line);
-  std::istream_iterator<std::string> begin(ss);
-  std::istream_iterator<std::string> end;
-  std::vector<std::string> counts(begin, end);
-  faux_model_.class_number_counts = std::vector<int>(counts.size());
-  std::transform(counts.begin(),
-                 counts.end(),
-                 faux_model_.class_number_counts.begin(),
-                 [](const std::string& val) {
-                   return std::stoi(val); });
+  faux_model_.class_number_counts = ReadSaveFileVectorInt(line);
   
   std::getline(input, line);
-  std::stringstream sss(line);
-  std::istream_iterator<std::string> begins(sss);
-  std::istream_iterator<std::string> ends;
-  std::vector<std::string> probs(begins, ends);
-  faux_model_.prior_probs = std::vector<float>(probs.size());
-  std::transform(probs.begin(),
-                 probs.end(),
-                 faux_model_.prior_probs.begin(),
-                 [](const std::string& val) {
-                   return std::stof(val); });
+  faux_model_.prior_probs = ReadSaveFileVectorFloat(line);
   
   // store vector of NumberClasses
   bool new_class = true;
@@ -75,15 +56,42 @@ void FileReader::ReadSaveFile(std::istream& input) {
       number_class.SetRowCount(faux_model_.row_count);
       number_class.SetColumnCount(faux_model_.column_count);
       
-      if (number_class.GetClassNumberCount() > 0) {
-        std::vector<std::vector<float>> matrix = ReadSaveFileMatrix(input);
-        number_class.SetFeatureProbsShaded(matrix);
-      }
-      
+      std::vector<std::vector<float>> matrix = ReadSaveFileMatrix(input);
+      number_class.SetFeatureProbsShaded(matrix);
       faux_model_.number_classes.push_back(number_class);
       new_class = true;
     }
   }  
+}
+
+std::vector<int>
+FileReader::ReadSaveFileVectorInt(const std::string& line) {
+  std::stringstream ss(line);
+  std::istream_iterator<std::string> begin(ss);
+  std::istream_iterator<std::string> end;
+  std::vector<std::string> counts(begin, end);
+  std::vector<int> destination(counts.size());
+  std::transform(counts.begin(),
+                 counts.end(),
+                 destination.begin(),
+                 [](const std::string& val) {
+                   return std::stoi(val); });
+  return destination;
+}
+
+std::vector<float>
+FileReader::ReadSaveFileVectorFloat(const std::string& line) {
+  std::stringstream sss(line);
+  std::istream_iterator<std::string> begins(sss);
+  std::istream_iterator<std::string> ends;
+  std::vector<std::string> probs(begins, ends);
+  std::vector<float> destination(probs.size());
+  std::transform(probs.begin(),
+                 probs.end(),
+                 destination.begin(),
+                 [](const std::string& val) {
+                   return std::stof(val); });
+  return destination;
 }
 
 std::vector<std::vector<float>>
@@ -92,18 +100,7 @@ FileReader::ReadSaveFileMatrix(std::istream& input) {
   for (int i = 0; i < faux_model_.row_count; i++) {
     std::string line;
     std::getline(input, line);
-
-    std::stringstream ss(line);
-    std::istream_iterator<std::string> begin(ss);
-    std::istream_iterator<std::string> end;
-    std::vector<std::string> tokens(begin, end);
-
-    std::vector<float> row(tokens.size());
-    std::transform(tokens.begin(),
-                   tokens.end(),
-                   row.begin(),
-                   [](const std::string& val) {
-                     return std::stof(val); });
+    std::vector<float> row = ReadSaveFileVectorFloat(line);
     matrix.push_back(row);
   }
   

@@ -41,6 +41,10 @@ class FileReader {
   
   void ReadSaveFile(std::istream&input);
   
+  std::vector<int> ReadSaveFileVectorInt(const std::string& line);
+  
+  std::vector<float> ReadSaveFileVectorFloat(const std::string& line);
+  
   std::vector<std::vector<float>> ReadSaveFileMatrix(std::istream& input);
   
   void ReadDataFile(std::istream& input);

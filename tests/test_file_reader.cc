@@ -93,6 +93,18 @@ TEST_CASE("Test reading from save file") {
   FileReader file_reader = FileReader(data_file);
   FileReader::FauxModel faux_model = file_reader.GetFauxModel();
   
+  SECTION("Faux model has correct Laplace constant") {
+    REQUIRE(faux_model.k_laplace == 1.0);
+  }
+  
+  SECTION("Faux model has correct max class count constant") {
+    REQUIRE(faux_model.k_max_class_count == 10);
+  }
+  
+  SECTION("Faux model has correct total class count") {
+    REQUIRE(faux_model.total_class_count == 4);
+  }
+  
   SECTION("Faux model has correct total image count") {
     REQUIRE(faux_model.total_image_count == 4);
   }
@@ -105,19 +117,23 @@ TEST_CASE("Test reading from save file") {
     REQUIRE(faux_model.column_count == 10);
   }
   
-  SECTION("Faux model has correct number of NumberClasses") {
-    REQUIRE(faux_model.number_classes.size() == 4);
-  }
-
-  SECTION("Faux model has correct number of nonempty NumberClasses") {
-    int count = 0;
-    for (const NumberClass& number_class : faux_model.number_classes) {
-      if (number_class.GetClassNumberCount() > 0) {
-        count++;
-      }
-    }
-    
-    REQUIRE(count == 4);
+  SECTION("Faux model has correct class number counts") {
+    std::vector<int> class_number_counts = {1, 1, 1, 1, 0, 0, 0, 0, 0, 0};
+    REQUIRE(faux_model.class_number_counts == class_number_counts);
   }
   
+  SECTION("Faux model has correct Number Classes") {
+    std::vector<int> class_numbers = {
+        faux_model.number_classes[0].GetClassNumber(),
+        faux_model.number_classes[1].GetClassNumber(),
+        faux_model.number_classes[2].GetClassNumber(),
+        faux_model.number_classes[3].GetClassNumber()
+    };
+    REQUIRE(class_numbers == std::vector<int>{0, 1, 2, 3});
+  }
+  
+  SECTION("Faux model has correct prior probabilities") {
+    std::vector<float> prior_probs = {0.25, 0.25, 0.25, 0.25};  
+    REQUIRE(faux_model.prior_probs == prior_probs);
+  }  
 }
