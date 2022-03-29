@@ -19,10 +19,15 @@ TEST_CASE("Test output to file") {
 
   std::ofstream save_file(path_to_save);
   FileWriter file_writer = FileWriter(save_file,
-                                      model.GetNumberClasses(),
+                                      model.GetKLaplace(),
+                                      model.GetKMaxClassCount(),
+                                      model.GetTotalClassCount(),
                                       model.GetTotalImageCount(),
                                       model.GetRowCount(),
-                                      model.GetColumnCount());
+                                      model.GetColumnCount(),
+                                      model.GetClassNumberCounts(),
+                                      model.GetNumberClasses(),
+                                      model.GetPriorProbs());
 
   std::string line;
   std::ifstream read_file(path_to_save);
@@ -30,6 +35,21 @@ TEST_CASE("Test output to file") {
   std::getline(read_file, line);
   SECTION("Prefixed with save indicator") {
     REQUIRE(line == "save");
+  }
+  
+  std::getline(read_file, line);
+  SECTION("Stores correct Laplace constant") {
+    REQUIRE(line == "1");
+  }
+  
+  std::getline(read_file, line);
+  SECTION("Stores correct max class count constant") {
+    REQUIRE(line == "10");
+  }
+  
+  std::getline(read_file, line);
+  SECTION("Stores correct total class count") {
+    REQUIRE(line == "4");
   }
   
   std::getline(read_file, line);
@@ -45,6 +65,16 @@ TEST_CASE("Test output to file") {
   std::getline(read_file, line);
   SECTION("Stores correct column count") {
     REQUIRE(line == "10");
+  }
+  
+  std::getline(read_file, line);
+  SECTION("Stores correct class count vector") {
+    REQUIRE(line == "1 1 1 1 0 0 0 0 0 0 ");
+  }
+  
+  std::getline(read_file, line);
+  SECTION("Stores correct prior probs vector") {
+    REQUIRE(line == "0.25 0.25 0.25 0.25 ");
   }
   
   std::getline(read_file, line);

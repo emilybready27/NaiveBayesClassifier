@@ -147,4 +147,12 @@ Model::GetFeatureProbsShaded(int class_number) const {
   return number_classes_[class_number].GetFeatureProbsShaded();
 }
 
+int Model::GetKMaxClassCount() const {
+  return kMaxClassCount;
+}
+
+float Model::GetKLaplace() const {
+  return kLaplace;
+}
+
 } // namespace naivebayes

@@ -16,9 +16,13 @@ class Model {
   
   friend std::ostream& operator<< (std::ostream& out, Model& model);
   
-  int GetTotalImageCount() const;
+  float GetKLaplace() const;
+  
+  int GetKMaxClassCount() const;
   
   int GetTotalClassCount() const;
+  
+  int GetTotalImageCount() const;
   
   int GetRowCount() const;
   
@@ -33,8 +37,7 @@ class Model {
   std::vector<float> GetPriorProbs() const;
   
   std::vector<std::vector<float>> GetFeatureProbsShaded(int class_number) const;
-  
-  
+
  private:
   /**
    * Used to read the input file stream into the Model.
