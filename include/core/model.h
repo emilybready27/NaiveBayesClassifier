@@ -28,8 +28,6 @@ class Model {
   
   int GetColumnCount() const;
   
-  std::vector<std::vector<Image>> GetImages() const;
-  
   std::vector<int> GetClassNumberCounts() const;
   
   std::vector<NumberClass> GetNumberClasses() const;

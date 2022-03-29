@@ -6,6 +6,7 @@ namespace naivebayes {
 
 Model::Model() {
   total_class_count_ = 0;
+  total_class_count_ = 0;
 }
 
 void Model::Train() {
@@ -66,7 +67,6 @@ void Model::SetClassNumberCounts(const std::vector<Image>& images) {
   }
 }
 
-
 void Model::ConstructNumberClasses(const std::vector<Image>& images) {
   // initialize number classes
   for (int i = 0; i < kMaxClassCount; i++) {
@@ -106,6 +106,14 @@ void Model::ComputeFeatureProbsShaded() {
   }
 }
 
+float Model::GetKLaplace() const {
+  return kLaplace;
+}
+
+int Model::GetKMaxClassCount() const {
+  return kMaxClassCount;
+}
+
 int Model::GetTotalClassCount() const {
   return total_class_count_;
 }
@@ -120,14 +128,6 @@ int Model::GetRowCount() const {
 
 int Model::GetColumnCount() const {
   return column_count_;
-}
-
-std::vector<std::vector<Image>> Model::GetImages() const {
-  std::vector<std::vector<Image>> images;
-  for (const NumberClass& number_class : number_classes_) {
-    images.push_back(number_class.GetImages());
-  }
-  return images;
 }
 
 std::vector<int> Model::GetClassNumberCounts() const {
@@ -145,14 +145,6 @@ std::vector<float> Model::GetPriorProbs() const {
 std::vector<std::vector<float>>
 Model::GetFeatureProbsShaded(int class_number) const {
   return number_classes_[class_number].GetFeatureProbsShaded();
-}
-
-int Model::GetKMaxClassCount() const {
-  return kMaxClassCount;
-}
-
-float Model::GetKLaplace() const {
-  return kLaplace;
 }
 
 } // namespace naivebayes

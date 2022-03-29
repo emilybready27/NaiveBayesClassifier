@@ -6,12 +6,12 @@ using naivebayes::FileReader;
 using naivebayes::Image;
 using naivebayes::NumberClass;
 
-const std::string path_to_data = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\minitrainingimagesandlabels.txt)";
-const std::string path_to_save = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\mini_save_file.txt)";
+const std::string path_to_data_2 = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\minitrainingimagesandlabels.txt)";
+const std::string path_to_save_2 = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\mini_save_file.txt)";
 
 
 TEST_CASE("Test reading from data file") {
-  std::ifstream data_file(path_to_data);
+  std::ifstream data_file(path_to_data_2);
   FileReader file_reader = FileReader(data_file);
   std::vector<Image> images = file_reader.GetData();
 
@@ -89,7 +89,7 @@ TEST_CASE("Test reading from data file") {
 }
 
 TEST_CASE("Test reading from save file") {
-  std::ifstream data_file(path_to_save);
+  std::ifstream data_file(path_to_save_2);
   FileReader file_reader = FileReader(data_file);
   FileReader::FauxModel faux_model = file_reader.GetFauxModel();
   
@@ -106,7 +106,7 @@ TEST_CASE("Test reading from save file") {
   }
   
   SECTION("Faux model has correct number of NumberClasses") {
-    REQUIRE(faux_model.number_classes.size() == 10);
+    REQUIRE(faux_model.number_classes.size() == 4);
   }
 
   SECTION("Faux model has correct number of nonempty NumberClasses") {
