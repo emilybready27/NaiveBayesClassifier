@@ -30,21 +30,5 @@ int main(int argc, char** argv) {
   std::ifstream save_file_read(path_to_save);
   save_file_read >> model;
   
-
-//  for (int i = 0; i < model.GetTotalClassCount(); i++) {
-//    std::cout << model.GetPriorProbs()[i] << std::endl;
-//  }
-//  std::cout << std::endl;
-//
-//  for (int i = 0; i < model.GetTotalClassCount(); i++) {
-//    for (int j = 0; j < model.GetRowCount(); j++) {
-//      for (int k = 0; k < model.GetColumnCount(); k++) {
-//        std::cout << model.GetFeatureProbsShaded(i)[j][k] << " ";
-//      }
-//      std::cout << std::endl;
-//    }
-//    std::cout << std::endl;
-//  }
-  
   return 0;
 }
