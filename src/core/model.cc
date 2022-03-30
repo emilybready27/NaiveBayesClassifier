@@ -1,6 +1,7 @@
 #include "core/model.h"
 #include "core/file_writer.h"
 #include <numeric>
+#include <map>
 
 namespace naivebayes {
 
@@ -69,17 +70,21 @@ void Model::SetClassNumberCounts(const std::vector<Image>& images) {
 
 void Model::ConstructNumberClasses(const std::vector<Image>& images) {
   // initialize number classes
+  // don't store this map because more difficult to save
+  std::map<int, int> class_numbers;
+  int count = 0;
   for (int i = 0; i < kMaxClassCount; i++) {
     // only build non-empty number classes
     if (class_number_counts_[i] != 0) {
       number_classes_.emplace_back(i);
+      class_numbers[i] = count++;
     }
   }
   
   for (const Image& image : images) {
     int class_number = image.GetClassNumber();
     // add image to corresponding number class
-    number_classes_[class_number].AddImage(image);
+    number_classes_[class_numbers[class_number]].AddImage(image);
   }
   
   row_count_ = number_classes_[0].GetRowCount();
