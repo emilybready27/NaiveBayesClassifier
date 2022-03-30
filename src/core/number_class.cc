@@ -15,61 +15,34 @@ void NumberClass::AddImage(const Image& image) {
   class_number_count_++;
   
   if (row_count_ == 0 && column_count_ == 0) {
-    row_count_ = image.GetNumberRows();
-    column_count_ = image.GetNumberColumns();
+    row_count_ = image.GetRowCount();
+    column_count_ = image.GetColumnCount();
   }
 }
 
-void NumberClass::ComputeFeatureProbsShaded(float kLaplace) {
-  // initialize each element with additive kLaplace constant in numerators
-  ResetFeatureProbsShaded(kLaplace);
+void NumberClass::ComputeFeatureProbsShaded(float k_laplace) {
+  // initialize each element with additive k_laplace constant in numerators
+  ResetFeatureProbsShaded(k_laplace);
   
   // in this class, find total number of images where pixel i,j is shaded
   // and store this in feature_probs_shaded_ to complete the numerators
   for (const Image& image : images_) {
     for (int i = 0; i < row_count_; i++) {
       for (int j = 0; j < column_count_; j++) {
-        int color = image.GetPixelColor(i, j); // 0 or 1
+        // color has 0 = unshaded and 1 = shaded
+        int color = image.GetPixelColor(i, j);
         feature_probs_shaded_[i][j] += static_cast<float>(color);
       }
     }
   }
   
   // divide each element of feature_probs_shaded_ by denominator
-  float denominator = static_cast<float>(class_number_count_) + (2 * kLaplace);
+  float denominator = static_cast<float>(class_number_count_) + (2 * k_laplace);
   for (int i = 0; i < row_count_; i++) {
     for (int j = 0; j < column_count_; j++) {
       feature_probs_shaded_[i][j] /= denominator;
     }
   }
-}
-
-std::vector<Image> NumberClass::GetImages() const {
-  return images_;
-}
-
-void NumberClass::SetClassNumberCount(int count) {
-  class_number_count_ = count;
-}
-
-int NumberClass::GetClassNumberCount() const {
-  return class_number_count_;
-}
-
-int NumberClass::GetClassNumber() const {
-  return class_number_;
-}
-
-std::vector<std::vector<float>> NumberClass::GetFeatureProbsShaded() const {
-  return feature_probs_shaded_;
-}
-
-int NumberClass::GetRowCount() const {
-  return row_count_;
-}
-
-int NumberClass::GetColumnCount() const {
-  return column_count_;
 }
 
 void NumberClass::ResetFeatureProbsShaded(float reset_value) {
@@ -91,12 +64,36 @@ void NumberClass::SetFeatureProbsShaded(
   }
 }
 
-void NumberClass::SetColumnCount(int count) {
-  column_count_ = count;
+std::vector<std::vector<float>> NumberClass::GetFeatureProbsShaded() const {
+  return feature_probs_shaded_;
+}
+
+int NumberClass::GetClassNumber() const {
+  return class_number_;
+}
+
+void NumberClass::SetClassNumberCount(int count) {
+  class_number_count_ = count;
+}
+
+int NumberClass::GetClassNumberCount() const {
+  return class_number_count_;
 }
 
 void NumberClass::SetRowCount(int count) {
   row_count_ = count;
+}
+
+int NumberClass::GetRowCount() const {
+  return row_count_;
+}
+
+void NumberClass::SetColumnCount(int count) {
+  column_count_ = count;
+}
+
+int NumberClass::GetColumnCount() const {
+  return column_count_;
 }
 
 } // namespace naivebayes

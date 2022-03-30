@@ -14,6 +14,7 @@ FileWriter::FileWriter(std::ostream& output,
                        const std::vector<int>& class_number_counts,
                        const std::vector<NumberClass>& number_classes,
                        const std::vector<float>& prior_probs) {
+  // used for indication of a save file
   output << "save" << std::endl;
   
   output << k_laplace << std::endl;
@@ -37,10 +38,8 @@ FileWriter::FileWriter(std::ostream& output,
     output << number_class.GetClassNumber() << std::endl;
     output << number_class.GetClassNumberCount() << std::endl;
     
-    if (number_class.GetClassNumberCount() == 0) {
-      continue;
-    }
-    
+    // save only feature probabilities of shaded because the feature
+    // probabilities of unshaded are easy to derive, save space
     for (int i = 0; i < row_count; i++) {
       for (int j = 0; j < column_count; j++) {
         output << number_class.GetFeatureProbsShaded()[i][j] << " ";

@@ -122,7 +122,7 @@ TEST_CASE("Test extraction operator overload with data file") {
   std::ifstream data_file(path_to_data_2);
   data_file >> model;
   model.Train();
-  
+
   SECTION("Total class count derived correctly") {
     REQUIRE(model.GetTotalClassCount() == 4);
   }
@@ -139,7 +139,7 @@ TEST_CASE("Test extraction operator overload with data file") {
     std::vector<int> class_number_counts = {1, 1, 1, 1, 0, 0, 0, 0, 0, 0};
     REQUIRE(model.GetClassNumberCounts() == class_number_counts);
   }
-  
+
   SECTION("Number Classes derived and sorted correctly") {
     std::vector<int> class_numbers = {
         model.GetNumberClasses()[0].GetClassNumber(),

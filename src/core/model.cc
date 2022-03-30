@@ -7,7 +7,7 @@ namespace naivebayes {
 
 Model::Model() {
   total_class_count_ = 0;
-  total_class_count_ = 0;
+  total_image_count_ = 0;
 }
 
 void Model::Train() {
@@ -19,9 +19,11 @@ std::istream& operator>> (std::istream& input, Model& model) {
   model.file_reader_ = FileReader(input);
   
   if (model.file_reader_.IsSaveFile()) {
+    // store FauxModel state needed for saved Model instance
     const FileReader::FauxModel& faux_model = model.file_reader_.GetFauxModel();
     model.ConstructSavedModel(faux_model);
   } else {
+    // process Images into the complete Model
     std::vector<Image> images = model.file_reader_.GetData();
     model.SetClassNumberCounts(images);
     model.ConstructNumberClasses(images);
@@ -70,23 +72,24 @@ void Model::SetClassNumberCounts(const std::vector<Image>& images) {
 
 void Model::ConstructNumberClasses(const std::vector<Image>& images) {
   // initialize number classes
-  // don't store this map because more difficult to save
+  // map nonempty class numbers to index in number_classes_ vector
   std::map<int, int> class_numbers;
   int count = 0;
   for (int i = 0; i < kMaxClassCount; i++) {
-    // only build non-empty number classes
+    // only build nonempty number classes
     if (class_number_counts_[i] != 0) {
       number_classes_.emplace_back(i);
       class_numbers[i] = count++;
     }
   }
   
+  // add image to corresponding number class
   for (const Image& image : images) {
     int class_number = image.GetClassNumber();
-    // add image to corresponding number class
     number_classes_[class_numbers[class_number]].AddImage(image);
   }
   
+  // row_count_ and column_count_ same for all images
   row_count_ = number_classes_[0].GetRowCount();
   column_count_ = number_classes_[0].GetColumnCount();
 }
@@ -96,8 +99,8 @@ void Model::ComputePriorProbs() {
                                        class_number_counts_.end(), 0);
   
   for (const int class_number_count : class_number_counts_) {
-    // only compute prior probability for non-empty classes
-    if (class_number_count != 0) {
+    // only compute prior probability for nonempty classes
+    if (class_number_count > 0) {
       float prob = (class_number_count + kLaplace) /
                    (total_image_count_ + (total_class_count_ * kLaplace));
       prior_probs_.push_back(prob);

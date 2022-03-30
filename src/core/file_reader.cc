@@ -20,6 +20,7 @@ void FileReader::ReadSaveFile(std::istream& input) {
   std::string line;
   std::getline(input, line); // skip over "save" line
 
+  // save all single-value state
   std::getline(input, line);
   faux_model_.k_laplace = std::stof(line);
   std::getline(input, line);
@@ -33,9 +34,11 @@ void FileReader::ReadSaveFile(std::istream& input) {
   std::getline(input, line);
   faux_model_.column_count = std::stoi(line);
   
+  // read in list of class number counts
   std::getline(input, line);
   faux_model_.class_number_counts = ReadSaveFileVectorInt(line);
   
+  // read in list of prior probabilities
   std::getline(input, line);
   faux_model_.prior_probs = ReadSaveFileVectorFloat(line);
   
@@ -56,6 +59,7 @@ void FileReader::ReadSaveFile(std::istream& input) {
       number_class.SetRowCount(faux_model_.row_count);
       number_class.SetColumnCount(faux_model_.column_count);
       
+      // construct feature probabilities shaded matrix
       std::vector<std::vector<float>> matrix = ReadSaveFileMatrix(input);
       number_class.SetFeatureProbsShaded(matrix);
       faux_model_.number_classes.push_back(number_class);
@@ -70,6 +74,8 @@ FileReader::ReadSaveFileVectorInt(const std::string& line) {
   std::istream_iterator<std::string> begin(ss);
   std::istream_iterator<std::string> end;
   std::vector<std::string> counts(begin, end);
+  
+  // transform each character into an integer
   std::vector<int> destination(counts.size());
   std::transform(counts.begin(),
                  counts.end(),
@@ -85,6 +91,8 @@ FileReader::ReadSaveFileVectorFloat(const std::string& line) {
   std::istream_iterator<std::string> begins(sss);
   std::istream_iterator<std::string> ends;
   std::vector<std::string> probs(begins, ends);
+  
+  // transform each character into a float
   std::vector<float> destination(probs.size());
   std::transform(probs.begin(),
                  probs.end(),
@@ -97,6 +105,7 @@ FileReader::ReadSaveFileVectorFloat(const std::string& line) {
 std::vector<std::vector<float>>
 FileReader::ReadSaveFileMatrix(std::istream& input) {
   std::vector<std::vector<float>> matrix;
+  
   for (int i = 0; i < faux_model_.row_count; i++) {
     std::string line;
     std::getline(input, line);
@@ -111,12 +120,12 @@ void FileReader::ReadDataFile(std::istream& input) {
   // set num_rows of the image
   int num_rows = ReadDataFileRows(input);
   int row_iterator = 0;
-  int class_number = 0; // update for each new image
+  int class_number = 0; // update for each new Image
   std::vector<std::vector<char>> pixels;
 
   std::string line;
   while (std::getline(input, line)) {
-    // reached class number line
+    // reached class number line, new Image
     if (line.size() == 1 && row_iterator == 0) {
       class_number = stoi(line);
       continue;
@@ -159,7 +168,7 @@ bool FileReader::IsSaveFile(std::istream& input) {
   std::string line;
   std::getline(input, line);
   input.seekg(0);
-  return line == "save";
+  return line == "save"; // used to indicate save file
 }
 
 bool FileReader::IsSaveFile() const {
@@ -167,15 +176,11 @@ bool FileReader::IsSaveFile() const {
 }
 
 std::vector<Image> FileReader::GetData() const {
-  // TODO: throw invalid_argument_exception
   return images_;
 }
 
 FileReader::FauxModel FileReader::GetFauxModel() const {
-  // TODO: throw invalid_argument_exception
   return faux_model_;
 }
-
-
 
 }  // namespace naivebayes
