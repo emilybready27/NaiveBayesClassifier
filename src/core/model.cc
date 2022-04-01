@@ -37,8 +37,15 @@ std::istream& operator>> (std::istream& input, Model& model) {
   } else {
     // process Images into the complete Model
     std::vector<Image> images = model.file_reader_.GetData();
-    model.SetClassNumberCounts(images);
-    model.ConstructNumberClasses(images);
+    
+    // continue building Model if not already complete
+    // otherwise, initialize a Validator to test the Model
+    if (model.number_classes_.size() == 0) {
+      model.SetClassNumberCounts(images);
+      model.ConstructNumberClasses(images);
+    } else {
+      model.validator_ = Validator(images, model.kMaxClassCount);
+    }
   }
   
   return input;

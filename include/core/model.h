@@ -3,6 +3,7 @@
 #include "number_class.h"
 #include "file_reader.h"
 #include "file_writer.h"
+#include "validator.h"
 
 namespace naivebayes {
 
@@ -80,6 +81,11 @@ class Model {
    * Used to write to an output file to save for later.
    */
   FileWriter file_writer_;
+  
+  /**
+   * Used to validate the accuracy of the Model's classifications.
+   */
+  Validator validator_;
   
   /**
    * Smoothing constant to prevent probabilities from being zero.
