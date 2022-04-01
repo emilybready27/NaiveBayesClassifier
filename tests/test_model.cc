@@ -5,11 +5,11 @@
 
 using naivebayes::Model;
 
-const std::string path_to_data_1 = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\tinytrainingimagesandlabels.txt)";
-const std::string path_to_data_2 = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\minitrainingimagesandlabels.txt)";
-const std::string path_to_data_3 = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\trainingimagesandlabels.txt)";
-const std::string path_to_save_1 = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\tiny_save_file.txt)";
-const std::string path_to_save_2 = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\mini_save_file.txt)";
+const std::string path_to_data_1 = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\training\tinytrainingimagesandlabels.txt)";
+const std::string path_to_data_2 = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\training\minitrainingimagesandlabels.txt)";
+const std::string path_to_data_3 = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\training\trainingimagesandlabels.txt)";
+const std::string path_to_save_1 = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\saved\tiny_save_file.txt)";
+const std::string path_to_save_2 = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\saved\mini_save_file.txt)";
 
 TEST_CASE("Test prior probabilities 3x3 images") {
   Model model = Model();
