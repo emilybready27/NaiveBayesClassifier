@@ -25,7 +25,7 @@ class Image {
   Image(const std::vector<std::string> &pixels, int class_number);
     
   /**
-   * Returns the pixel color at the given coordinatesby mapping 
+   * Returns the pixel color at the given coordinates by mapping 
    * ' ' symbol to color 0 and '#' or '+' symbol to color 1.
    * @param row int
    * @param column int
@@ -36,9 +36,10 @@ class Image {
   bool IsPixelShaded(int row, int column) const;
 
   /**
-   * Getters for Image state.
+   * Setters and Getters for Image state.
    */
   std::vector<std::vector<char>> GetPixels() const;
+  void SetClassNumber(int class_number);
   int GetClassNumber() const;
   int GetRowCount() const;
   int GetColumnCount() const;

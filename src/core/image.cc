@@ -34,6 +34,10 @@ std::vector<std::vector<char>> Image::GetPixels() const {
   return pixels_;
 }
 
+void Image::SetClassNumber(int class_number) {
+  class_number_ = class_number;
+}
+
 int Image::GetClassNumber() const {
   return class_number_;
 }
