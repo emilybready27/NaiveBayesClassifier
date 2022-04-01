@@ -1,9 +1,12 @@
 #include <catch2/catch.hpp>
+#include <math.h>
 
 #include <core/model.h>
 #include <core/image.h>
+#include <iostream>
 
 using naivebayes::Model;
+using naivebayes::Image;
 
 const std::string path_to_data_1 = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\training\tinytrainingimagesandlabels.txt)";
 const std::string path_to_data_2 = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\training\minitrainingimagesandlabels.txt)";
@@ -244,36 +247,76 @@ TEST_CASE("Test insertion operator overload") {
   }
 }
 
-TEST_CASE("Test loading 28x28 training images") {
+//TEST_CASE("Test loading 28x28 training images") {
+//  Model model = Model();
+//  std::ifstream data_file(path_to_data_3);
+//  data_file >> model;
+//  model.Train();
+//  
+//  SECTION("Correct total class count") {
+//    REQUIRE(model.GetTotalClassCount() == 10);
+//  }
+//  
+//  SECTION("Correct total image count") {
+//    REQUIRE(model.GetTotalImageCount() == 5000);
+//  }
+//  
+//  SECTION("Correct row count") {
+//    REQUIRE(model.GetRowCount() == 28);
+//  }
+//  
+//  SECTION("Correct column count") {
+//    REQUIRE(model.GetColumnCount() == 28);
+//  }
+//  
+//  SECTION("Correct class number counts") {
+//    std::vector<int> counts = {
+//        479, 563, 488, 493, 535, 434, 501, 550, 462, 495
+//    };
+//    REQUIRE(model.GetClassNumberCounts() == counts);
+//  }
+//  
+//  SECTION("Correct number of NumberClasses") {
+//    REQUIRE(model.GetNumberClasses().size() == 10);
+//  }
+//}
+
+TEST_CASE("Test classification method") {
   Model model = Model();
-  std::ifstream data_file(path_to_data_3);
+  std::ifstream data_file(path_to_data_1);
   data_file >> model;
   model.Train();
   
-  SECTION("Correct total class count") {
-    REQUIRE(model.GetTotalClassCount() == 10);
+  std::vector<std::string> pixels = {"## ",
+                                     " # ",
+                                     " # "};
+  Image image = Image(pixels, 1);
+  
+  SECTION("Returns correct log-likelihood score of class 0") {
+    float score = logf(0.4f)
+                  + logf(0.66667f) + logf(0.66667f) + logf(0.33333f)
+                  + logf(0.33333f) + logf(0.33333f) + logf(0.33333f)
+                  + logf(0.33333f) + logf(0.66667f) + logf(0.33333f);
+     REQUIRE(model.ComputeLogLikelihoods(image)[0] == Approx(score));
   }
   
-  SECTION("Correct total image count") {
-    REQUIRE(model.GetTotalImageCount() == 5000);
+  SECTION("Returns correct log-likelihood score of class 1") {
+    float score = logf(0.6f)
+                  + logf(0.5f) + logf(0.75f) + logf(0.75f)
+                  + logf(0.75f) + logf(0.75f) + logf(0.75f)
+                  + logf(0.5f) + logf(0.75f) + logf(0.5f);
+    REQUIRE(model.ComputeLogLikelihoods(image)[1] == Approx(score));
+  }
+
+  SECTION("Classifies class 1 correctly") {
+    REQUIRE(model.Classify(image) == 1);
   }
   
-  SECTION("Correct row count") {
-    REQUIRE(model.GetRowCount() == 28);
+  SECTION("Classifies class 0 correctly") {
+    std::vector<std::string> new_pixels = {"###",
+                                           "# #",
+                                           "###"};
+    Image new_image = Image(new_pixels, 0);
+    REQUIRE(model.Classify(new_image) == 0);
   }
-  
-  SECTION("Correct column count") {
-    REQUIRE(model.GetColumnCount() == 28);
-  }
-  
-  SECTION("Correct class number counts") {
-    std::vector<int> counts = {
-        479, 563, 488, 493, 535, 434, 501, 550, 462, 495
-    };
-    REQUIRE(model.GetClassNumberCounts() == counts);
-  }
-  
-  SECTION("Correct number of NumberClasses") {
-    REQUIRE(model.GetNumberClasses().size() == 10);
-  }
-} 
+}
