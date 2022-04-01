@@ -2,6 +2,8 @@
 #include "core/file_writer.h"
 #include <numeric>
 #include <map>
+#include <math.h>
+#include <algorithm>
 
 namespace naivebayes {
 
@@ -14,6 +16,16 @@ void Model::Train() {
   ComputePriorProbs();
   ComputeFeatureProbsShaded();
 }
+
+int Model::Classify(const Image& image) {
+  std::vector<float> log_likelihoods = ComputeLogLikelihoods(image);
+  
+  auto max_it = std::max_element(log_likelihoods.begin(),
+                                 log_likelihoods.end());
+  return std::distance(log_likelihoods.begin(), max_it);
+}
+
+
 
 std::istream& operator>> (std::istream& input, Model& model) {
   model.file_reader_ = FileReader(input);
@@ -114,6 +126,31 @@ void Model::ComputeFeatureProbsShaded() {
   }
 }
 
+std::vector<float> Model::ComputeLogLikelihoods(const Image& image) {
+  std::vector<float> log_likelihoods(kMaxClassCount, 0);
+  for (int i = 0; i < kMaxClassCount; i++) {
+    // empty NumberClasses not considered
+    if (class_number_counts_[i] <= 0) {
+      log_likelihoods[i] = -1 * std::numeric_limits<float>::infinity();
+    } else {
+      // add log of prior probability for class i
+      log_likelihoods[i] += logf(prior_probs_[i]);
+      
+      // add log of feature probabilities based on shade of each pixel
+      for (int j = 0; j < image.GetRowCount(); j++) {
+        for (int k = 0; k < image.GetColumnCount(); k++) {
+          if (image.IsPixelShaded(j, k)) {
+            log_likelihoods[i] += logf(GetFeatureProbsShadedPixel(i, j, k));
+          } else {
+            log_likelihoods[i] += logf(1 - GetFeatureProbsShadedPixel(i, j, k));
+          }
+        }
+      }
+    }
+  }
+  return log_likelihoods;
+}
+
 float Model::GetKLaplace() const {
   return kLaplace;
 }
@@ -153,6 +190,11 @@ std::vector<float> Model::GetPriorProbs() const {
 std::vector<std::vector<float>>
 Model::GetFeatureProbsShaded(int class_number) const {
   return number_classes_[class_number].GetFeatureProbsShaded();
+}
+
+float Model::GetFeatureProbsShadedPixel(int class_number, int row,
+                                        int column) const {
+  return number_classes_[class_number].GetFeatureProbsShaded()[row][column];
 }
 
 } // namespace naivebayes

@@ -21,6 +21,22 @@ class Model {
    * Computes the prior and feature probabilities.
    */
   void Train();
+
+  /**
+   * Classifies the given new Image as a digit (0-9) using the
+   * log-likelihoods provided by the calling Model.
+   * @param image Image
+   * @return int
+   */
+  int Classify(const Image& image);
+  
+  /**
+   * Computes the log-likelihoods that the given Image belongs to
+   * each of the different NumberClasses.
+   * @param image Image
+   * @return std::vector<float>
+   */
+  std::vector<float> ComputeLogLikelihoods(const Image& image);
   
   /**
    * Extracts the input from the given stream and continues construction
@@ -52,6 +68,7 @@ class Model {
   std::vector<NumberClass> GetNumberClasses() const;
   std::vector<float> GetPriorProbs() const;
   std::vector<std::vector<float>> GetFeatureProbsShaded(int class_number) const;
+  float GetFeatureProbsShadedPixel(int class_number, int row, int column) const;
 
  private:
   /**
@@ -138,7 +155,7 @@ class Model {
   /**
    * Computes the feature probabilities of shaded pixels and stores them
    * within the vector of NumberClasses.
-   * Note that the feature probabilities of unshaded pixels is derivdd by
+   * Note that the feature probabilities of unshaded pixels is derived by
    * 1 - feature probabilities of shaded pixels, so storage isn't necessary.
    */
   void ComputeFeatureProbsShaded();

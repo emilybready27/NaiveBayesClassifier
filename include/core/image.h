@@ -32,6 +32,8 @@ class Image {
    * @return int (0 or 1)
    */
   int GetPixelColor(int row, int column) const;
+  
+  bool IsPixelShaded(int row, int column) const;
 
   /**
    * Getters for Image state.

@@ -26,6 +26,10 @@ int Image::GetPixelColor(int row, int column) const {
   return (pixels_[row][column] == ' ') ? 0 : 1;
 }
 
+bool Image::IsPixelShaded(int row, int column) const {
+  return pixels_[row][column] != ' ';
+}
+
 std::vector<std::vector<char>> Image::GetPixels() const {
   return pixels_;
 }
