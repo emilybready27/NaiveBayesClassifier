@@ -2,7 +2,6 @@
 #include <ostream>
 
 #include <core/model.h>
-#include <core/
 
 using naivebayes::Model;
 
@@ -12,8 +11,10 @@ int main(int argc, char** argv) {
     return 1;
   }
   
-  std::string path_to_data = argv[1];
-  std::string path_to_save = argv[2];
+//  std::string path_to_data = argv[1];
+//  std::string path_to_save = argv[2];
+  std::string path_to_data = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\training\tinytrainingimagesandlabels.txt)";
+  std::string path_to_save = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\saved\tiny_save_file.txt)";
   
   Model model = Model();
   
@@ -32,9 +33,11 @@ int main(int argc, char** argv) {
   save_file_read >> model;
   
   // load in validator data
-  std::string path_to_validate = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\validation\testimagesandlabels.txt)";
+  std::string path_to_validate = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\validation\tinytestimagesandlabels.txt)";
   std::ifstream validation_data(path_to_validate);
   validation_data >> model;
+
+  std::cout << model.Validate() << std::endl;
   
   return 0;
 }

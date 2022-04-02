@@ -5,6 +5,9 @@
 
 namespace naivebayes {
 
+/**
+ * Class used to judge the accuracy of Image class number predictions.
+ */
 class Validator {
  public:
   /**
@@ -19,18 +22,57 @@ class Validator {
    */
   Validator(const std::vector<Image>& images, int k_max_class_count);
   
-  void Validate();
+  /**
+   * Adds an actual_class_number prediction from a Model to internal state.
+   * @param actual_class_number 
+   */
+  void AddPrediction(int actual_class_number);
+  
+  /**
+   * Calculates scaled ratios for correct number of predictions to
+   * total number of predictions, both between and within NumberClasses.
+   * @return float
+   */
+  float Validate();
+  
+  /**
+   * Getters for Validator state.
+   */
+  std::vector<Image> GetImages() const;
+  std::vector<float> GetAccuracies() const;
+  float GetAccuracy() const;
 
- private:
+ private:  
+  /**
+   * Vector of Images to validate.
+   */
+  std::vector<Image> images_;
+  
+  /**
+   * Vector of the number of images corresponding to each NumberClass.
+   */
+  std::vector<int> class_number_counts_;
+  
+  /**
+   * Numerical estimate for the accuracy of the Model.
+   */
+  float accuracy_;
+  
   /**
    * Vector of how accurate each NumberClass is.
    */
   std::vector<float> accuracies_;
   
   /**
-   * Vector of Images to validate.
+   * Vector of the class numbers read in from the input stream.
    */
-  std::vector<Image> images_;
+  std::vector<int> expected_class_numbers_;
+  
+  /**
+   * Vector of the class numbers predicted by a Model.
+   */
+  std::vector<int> actual_class_numbers_;
+  
 };
 
 } // namespace naivebayes

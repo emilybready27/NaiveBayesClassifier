@@ -40,6 +40,11 @@ class Model {
   std::vector<float> ComputeLogLikelihoods(const Image& image);
   
   /**
+   * Tests the accuracy of the calling Model by returning an overall accuracy.
+   */
+  float Validate();
+  
+  /**
    * Extracts the input from the given stream and continues construction
    * of the given Model.
    * @param in std::istream

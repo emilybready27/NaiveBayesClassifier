@@ -154,12 +154,17 @@ int FileReader::ReadDataFileRows(std::istream& input) {
   while (std::getline(input, line)) {
     if (line.size() == 1 && row_iterator != 0) {
       num_rows = row_iterator - 1;
-      row_iterator = 0;
       break;
     }
     row_iterator++;
   }
   
+  // handle one-image files
+  if (num_rows == 0) {
+    num_rows = row_iterator - 1;
+  }
+  
+  input.clear();
   input.seekg(0); // set iterator to beginning of file again
   return num_rows;
 }

@@ -25,7 +25,14 @@ int Model::Classify(const Image& image) {
   return std::distance(log_likelihoods.begin(), max_it);
 }
 
-
+float Model::Validate() {
+  for (const Image& image : validator_.GetImages()) {
+    int class_number = Classify(image);
+    validator_.AddPrediction(class_number);
+  }
+  
+  return validator_.Validate();
+}
 
 std::istream& operator>> (std::istream& input, Model& model) {
   model.file_reader_ = FileReader(input);

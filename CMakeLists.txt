@@ -40,7 +40,7 @@ FetchContent_Declare(
 FetchContent_GetProperties(catch2)
 if(NOT catch2_POPULATED)
     FetchContent_Populate(catch2)
-    add_library(catch2 INTERFACE src/core/image.cc include/core/image.h tests/test_image.cc src/core/model.cc include/core/model.h tests/test_model.cc src/core/number_class.cc include/core/number_class.h src/core/file_writer.cc include/core/file_writer.h tests/test_file_writer.cc tests/test_number_class.cc src/core/validator.cc include/core/validator.h)
+    add_library(catch2 INTERFACE src/core/image.cc include/core/image.h tests/test_image.cc src/core/model.cc include/core/model.h tests/test_model.cc src/core/number_class.cc include/core/number_class.h src/core/file_writer.cc include/core/file_writer.h tests/test_file_writer.cc tests/test_number_class.cc src/core/validator.cc include/core/validator.h tests/test_validator.cc)
     target_include_directories(catch2 INTERFACE ${catch2_SOURCE_DIR}/single_include)
 endif()
 
@@ -51,9 +51,10 @@ include("${CINDER_PATH}/proj/cmake/modules/cinderMakeApp.cmake")
 
 list(APPEND CORE_SOURCE_FILES src/core/model.cc
                               src/core/file_reader.cc
+                              src/core/file_writer.cc
+                              src/core/validator.cc
                               src/core/image.cc
-                              src/core/number_class.cc
-                              src/core/file_writer.cc)
+                              src/core/number_class.cc)
 
 list(APPEND SOURCE_FILES    ${CORE_SOURCE_FILES}
                             src/visualizer/naive_bayes_app.cc
@@ -63,7 +64,8 @@ list(APPEND TEST_FILES tests/test_model.cc
                        tests/test_file_reader.cc
                        tests/test_image.cc
                        tests/test_file_writer.cc
-                       tests/test_number_class.cc)
+                       tests/test_number_class.cc
+                       tests/test_validator.cc)
 
 add_executable(train-model apps/train_model_main.cc ${CORE_SOURCE_FILES})
 target_include_directories(train-model PRIVATE include)

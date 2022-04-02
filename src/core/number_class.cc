@@ -11,6 +11,8 @@ NumberClass::NumberClass(int class_number) {
 }
 
 void NumberClass::AddImage(const Image& image) {
+  // TODO: instead of saving the image to the class, save the image shade
+  // for each pixel as a count of frequencies in a SINGLE matrix...
   images_.push_back(image);
   class_number_count_++;
   
