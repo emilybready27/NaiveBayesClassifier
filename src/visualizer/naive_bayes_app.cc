@@ -11,14 +11,11 @@ NaiveBayesApp::NaiveBayesApp()
 }
 
 void NaiveBayesApp::setup() {
-  std::string path_to_data = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\training\trainingimagesandlabels.txt)";
-  model_ = Model();  
-
-  // load in training data
-  std::ifstream data_file(path_to_data);
-  data_file >> model_;
-  
-  model_.Train();
+  // load in saved Model, already trained
+  std::string path_to_save = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\saved\save_file.txt)";
+  model_ = Model();
+  std::ifstream save_file(path_to_save);
+  save_file >> model_;
 }
 
 void NaiveBayesApp::draw() {

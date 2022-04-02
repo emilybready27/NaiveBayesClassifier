@@ -53,8 +53,8 @@ list(APPEND CORE_SOURCE_FILES src/core/model.cc
                               src/core/file_reader.cc
                               src/core/file_writer.cc
                               src/core/validator.cc
-                              src/core/image.cc
-                              src/core/number_class.cc)
+                              src/core/number_class.cc
+                              src/core/image.cc)
 
 list(APPEND SOURCE_FILES    ${CORE_SOURCE_FILES}
                             src/visualizer/naive_bayes_app.cc
@@ -62,10 +62,10 @@ list(APPEND SOURCE_FILES    ${CORE_SOURCE_FILES}
 
 list(APPEND TEST_FILES tests/test_model.cc
                        tests/test_file_reader.cc
-                       tests/test_image.cc
                        tests/test_file_writer.cc
+                       tests/test_validator.cc
                        tests/test_number_class.cc
-                       tests/test_validator.cc)
+                       tests/test_image.cc)
 
 add_executable(train-model apps/train_model_main.cc ${CORE_SOURCE_FILES})
 target_include_directories(train-model PRIVATE include)

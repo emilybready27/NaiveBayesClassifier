@@ -6,15 +6,15 @@
 using naivebayes::Model;
 
 int main(int argc, char** argv) {
-  if (argc != 3) {
-    std::cout << "Usage: ./train_model path-to-data path-to-save";
+  if (argc != 4) {
+    std::cout << "Usage: ./train_model path-to-data path-to-save"
+                 "path-to-validate";
     return 1;
   }
   
-//  std::string path_to_data = argv[1];
-//  std::string path_to_save = argv[2];
-  std::string path_to_data = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\training\trainingimagesandlabels.txt)";
-  std::string path_to_save = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\saved\save_file.txt)";
+  std::string path_to_data = argv[1];
+  std::string path_to_save = argv[2];
+  std::string path_to_validate = argv[3];
   
   Model model = Model();
   
@@ -32,10 +32,9 @@ int main(int argc, char** argv) {
   std::ifstream save_file_read(path_to_save);
   save_file_read >> model;
 
-  model.PrintModel();
+  //model.PrintModel();
 
   // load in validator data
-  std::string path_to_validate = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\validation\testimagesandlabels.txt)";
   std::ifstream validation_data(path_to_validate);
   validation_data >> model;
 

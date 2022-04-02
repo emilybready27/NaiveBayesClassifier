@@ -3,7 +3,6 @@
 
 #include <core/model.h>
 #include <core/image.h>
-#include <iostream>
 
 using naivebayes::Model;
 using naivebayes::Image;
@@ -11,8 +10,10 @@ using naivebayes::Image;
 const std::string path_to_data_1 = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\training\tinytrainingimagesandlabels.txt)";
 const std::string path_to_data_2 = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\training\minitrainingimagesandlabels.txt)";
 const std::string path_to_data_3 = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\training\trainingimagesandlabels.txt)";
-const std::string path_to_save_1 = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\saved\tiny_save_file.txt)";
-const std::string path_to_save_2 = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\saved\mini_save_file.txt)";
+const std::string path_to_save = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\saved\mini_save_file.txt)";
+const std::string path_to_validate_1 = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\validation\tinytestimagesandlabels.txt)";
+const std::string path_to_validate_2 = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\validation\minitestimagesandlabels.txt)";
+const std::string path_to_validate_3 = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\validation\testimagesandlabels.txt)";
 
 TEST_CASE("Test prior probabilities 3x3 images") {
   Model model = Model();
@@ -154,7 +155,7 @@ TEST_CASE("Test extraction operator overload with data file") {
 
 TEST_CASE("Test extraction operator overload with save file") {
   Model model = Model();
-  std::ifstream save_file_read(path_to_save_2);
+  std::ifstream save_file_read(path_to_save);
   save_file_read >> model;
   
   SECTION("Total class count derived correctly") {
@@ -208,37 +209,31 @@ TEST_CASE("Test insertion operator overload") {
   data_file >> model1;
   model1.Train();
   
-  std::ofstream save_file(path_to_save_2);
+  std::ofstream save_file(path_to_save);
   save_file << model1;
   
   Model model2 = Model();
-  std::ifstream save_file_read(path_to_save_2);
+  std::ifstream save_file_read(path_to_save);
   save_file_read >> model2;
   
   SECTION("Two models have same total class image count") {
     REQUIRE(model1.GetTotalClassCount() == model2.GetTotalClassCount());
   }
-  
   SECTION("Two models have same total image count") {
     REQUIRE(model1.GetTotalImageCount() == model2.GetTotalImageCount());
   }
-  
   SECTION("Two models have same row count") {
     REQUIRE(model1.GetRowCount() == model2.GetRowCount());
   }
-  
   SECTION("Two models have same column count") {
     REQUIRE(model1.GetColumnCount() == model2.GetColumnCount());
   }
-  
   SECTION("Two models have same class number counts") {
     REQUIRE(model1.GetClassNumberCounts() == model2.GetClassNumberCounts());
   }
-  
   SECTION("Two models have same prior probabilities") {
     REQUIRE(model1.GetPriorProbs() == model2.GetPriorProbs());
   }
-  
   SECTION("Two models have same feature probs shaded for class 0") {
     REQUIRE(model1.GetFeatureProbsShaded(0, 0, 0)
             == Approx(model2.GetFeatureProbsShaded(0, 0, 0)));
@@ -254,32 +249,27 @@ TEST_CASE("Test loading 28x28 training images") {
   SECTION("Correct total class count") {
     REQUIRE(model.GetTotalClassCount() == 10);
   }
-
   SECTION("Correct total image count") {
     REQUIRE(model.GetTotalImageCount() == 5000);
   }
-
   SECTION("Correct row count") {
     REQUIRE(model.GetRowCount() == 28);
   }
-
   SECTION("Correct column count") {
     REQUIRE(model.GetColumnCount() == 28);
   }
-
   SECTION("Correct class number counts") {
     std::vector<int> counts = {
         479, 563, 488, 493, 535, 434, 501, 550, 462, 495
     };
     REQUIRE(model.GetClassNumberCounts() == counts);
   }
-
   SECTION("Correct number of NumberClasses") {
     REQUIRE(model.GetNumberClasses().size() == 10);
   }
 }
 
-TEST_CASE("Test classification method") {
+TEST_CASE("Test log-likelihood method") {
   Model model = Model();
   std::ifstream data_file(path_to_data_1);
   data_file >> model;
@@ -305,16 +295,117 @@ TEST_CASE("Test classification method") {
                   + logf(0.5f) + logf(0.75f) + logf(0.5f);
     REQUIRE(model.ComputeLogLikelihoods(image)[1] == Approx(score));
   }
+}
 
+TEST_CASE("Test classification and validation 3x3") {
+  Model model = Model();
+  std::ifstream data_file(path_to_data_1);
+  data_file >> model;
+  model.Train();
+  
+  SECTION("Classifies class 0 correctly") {
+    Image image = Image({"###",
+                         "# #",
+                         " ##"}, 0);
+    REQUIRE(model.Classify(image) == 0);
+  }
+  
   SECTION("Classifies class 1 correctly") {
+    Image image = Image({"## ",
+                         " # ",
+                         " # "}, 1);
     REQUIRE(model.Classify(image) == 1);
   }
   
-  SECTION("Classifies class 0 correctly") {
-    std::vector<std::string> new_pixels = {"###",
-                                           "# #",
-                                           "###"};
-    Image new_image = Image(new_pixels, 0);
-    REQUIRE(model.Classify(new_image) == 0);
+  SECTION("Has correct validation accuracy") {
+    std::ifstream validation_data(path_to_validate_1);
+    validation_data >> model;
+    REQUIRE(model.Validate() >= 0.7);
+  }
+}
+
+TEST_CASE("Test classification and validation 10x10") {
+  Model model = Model();
+  std::ifstream data_file(path_to_data_2);
+  data_file >> model;
+  model.Train();
+  
+  SECTION("Classifies class 2 correctly") {
+    Image image = Image({"          ",
+                         "          ",
+                         "          ",
+                         "  +####+  ",
+                         " +   +##+ ",
+                         "   +##+   ",
+                         "  +##+    ",
+                         " +######+ ",
+                         "          ",
+                         "          "}, 2);
+    REQUIRE(model.Classify(image) == 2);
+  }
+  
+  SECTION("Classifies class 3 correctly") {
+    Image image = Image({"          ",
+                         "          ",
+                         "          ",
+                         "  +###+   ",
+                         " +   +##+ ",
+                         "   +##+   ",
+                         " +   +##+ ",
+                         "  +###+   ",
+                         "          ",
+                         "          "}, 3);
+    REQUIRE(model.Classify(image) == 3);
+  }
+  
+  SECTION("Has correct validation accuracy") {
+    std::ifstream validation_data(path_to_validate_2);
+    validation_data >> model;
+    REQUIRE(model.Validate() >= 0.7);
+  }
+}
+
+TEST_CASE("Test classification and validation 28x28") {
+  Model model = Model();
+  std::ifstream data_file(path_to_data_3);
+  data_file >> model;
+  model.Train();
+
+  SECTION("Classifies class 9 correctly") {
+    Image image = Image({"                            ",
+                         "                            ",
+                         "                            ",
+                         "                            ",
+                         "                            ",
+                         "                            ",
+                         "                            ",
+                         "            ++###++++       ",
+                         "           +###+####+       ",
+                         "          +##++  +##+       ",
+                         "         +##+   +###+       ",
+                         "        +##+    ###+        ",
+                         "       +##+    +##+         ",
+                         "       ##+   +###+          ",
+                         "      +##+++#####+          ",
+                         "       ##########           ",
+                         "       +###+++##+           ",
+                         "             +##+           ",
+                         "             +##+           ",
+                         "              ##+           ",
+                         "             +##+           ",
+                         "             +##+           ",
+                         "             +##+           ",
+                         "              ##+           ",
+                         "              +#++          ",
+                         "               +#+          ",
+                         "                +#+         ",
+                         "                            "}, 9);
+    REQUIRE(model.Classify(image) == 9);
+  }
+
+  SECTION("Has correct validation accuracy") {
+    std::ifstream validation_data(path_to_validate_3);
+    validation_data >> model;
+    REQUIRE(model.Validate() >= 0.7);
   }
 }

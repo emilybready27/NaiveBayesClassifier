@@ -50,7 +50,7 @@ class Sketchpad {
    * Set all of the sketchpad pixels to an unshaded state.
    */
   void Clear();
-  
+
   Image GetImage() const;
 
  private:
@@ -62,7 +62,7 @@ class Sketchpad {
   double pixel_side_length_;
 
   double brush_radius_;
-  
+
   Image image_;
 };
 

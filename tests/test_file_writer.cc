@@ -8,7 +8,7 @@ using naivebayes::FileWriter;
 using naivebayes::Model;
 
 const std::string path_to_data_2 = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\training\minitrainingimagesandlabels.txt)";
-const std::string path_to_save_2 = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\\saved\mini_save_file_2.txt)";
+const std::string path_to_save = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\\saved\mini_save_file_2.txt)";
 
 TEST_CASE("Test output to file") {
   Model model = Model();
@@ -17,7 +17,7 @@ TEST_CASE("Test output to file") {
   
   model.Train();
 
-  std::ofstream save_file(path_to_save_2);
+  std::ofstream save_file(path_to_save);
   FileWriter file_writer = FileWriter(save_file,
                                       model.GetKLaplace(),
                                       model.GetKMaxClassCount(),
@@ -30,7 +30,7 @@ TEST_CASE("Test output to file") {
                                       model.GetPriorProbs());
 
   std::string line;
-  std::ifstream read_file(path_to_save_2);
+  std::ifstream read_file(path_to_save);
   
   std::getline(read_file, line);
   SECTION("Prefixed with save indicator") {

@@ -7,7 +7,7 @@ using naivebayes::Image;
 using naivebayes::NumberClass;
 
 const std::string path_to_data_2 = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\training\minitrainingimagesandlabels.txt)";
-const std::string path_to_save_2 = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\saved\mini_save_file.txt)";
+const std::string path_to_save = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\saved\mini_save_file.txt)";
 
 
 TEST_CASE("Test reading from data file") {
@@ -89,7 +89,7 @@ TEST_CASE("Test reading from data file") {
 }
 
 TEST_CASE("Test reading from save file") {
-  std::ifstream data_file(path_to_save_2);
+  std::ifstream data_file(path_to_save);
   FileReader file_reader = FileReader(data_file);
   FileReader::FauxModel faux_model = file_reader.GetFauxModel();
   
