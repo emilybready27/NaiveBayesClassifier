@@ -13,7 +13,7 @@ TEST_CASE("Test validation method") {
                         " # "}, 1);
   std::vector<Image> images = {image1};
   Validator validator = Validator(images, 10);
-  validator.AddPrediction(1);
+  validator.Compare(1);
   
   SECTION("Has correct accuracy") {
     REQUIRE(validator.Validate() == 1);

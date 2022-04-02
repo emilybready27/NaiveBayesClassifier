@@ -44,20 +44,22 @@ void FileReader::ReadSaveFile(std::istream& input) {
   
   // store vector of NumberClasses
   bool new_class = true;
-  NumberClass number_class = NumberClass(0);
+  NumberClass number_class = NumberClass(0,
+                                         faux_model_.row_count,
+                                         faux_model_.column_count);
   while (input.peek() != EOF) {
     // construct new NumberClass
     if (new_class) {
       std::getline(input, line);
-      number_class = NumberClass(stoi(line));
+      number_class = NumberClass(stoi(line),
+                                 faux_model_.row_count,
+                                 faux_model_.column_count);
       new_class = false;
       
     // store NumberClass data   
     } else {
       std::getline(input, line);
       number_class.SetClassNumberCount(stoi(line));
-      number_class.SetRowCount(faux_model_.row_count);
-      number_class.SetColumnCount(faux_model_.column_count);
       
       // construct feature probabilities shaded matrix
       std::vector<std::vector<float>> matrix = ReadSaveFileMatrix(input);

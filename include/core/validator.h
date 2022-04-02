@@ -26,7 +26,7 @@ class Validator {
    * Adds an actual_class_number prediction from a Model to internal state.
    * @param actual_class_number 
    */
-  void AddPrediction(int actual_class_number);
+  void Compare(int expected_class_number, int actual_class_number);
   
   /**
    * Calculates scaled ratios for correct number of predictions to
@@ -49,6 +49,11 @@ class Validator {
   std::vector<Image> images_;
   
   /**
+   * Total number of images to validate.
+   */
+  int image_count_;
+  
+  /**
    * Vector of the number of images corresponding to each NumberClass.
    */
   std::vector<int> class_number_counts_;
@@ -61,18 +66,7 @@ class Validator {
   /**
    * Vector of how accurate each NumberClass is.
    */
-  std::vector<float> accuracies_;
-  
-  /**
-   * Vector of the class numbers read in from the input stream.
-   */
-  std::vector<int> expected_class_numbers_;
-  
-  /**
-   * Vector of the class numbers predicted by a Model.
-   */
-  std::vector<int> actual_class_numbers_;
-  
+  std::vector<float> accuracies_;  
 };
 
 } // namespace naivebayes

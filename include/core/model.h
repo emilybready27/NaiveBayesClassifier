@@ -61,6 +61,8 @@ class Model {
    */
   friend std::ostream& operator<< (std::ostream& out, Model& model);
   
+  void PrintModel() const;
+  
   /**
    * Getters for Model state.
    */
@@ -144,13 +146,6 @@ class Model {
    * @param faux_model FileReader::FauxModel
    */
   void ConstructSavedModel(const FileReader::FauxModel& faux_model);
-  
-  /**
-   * Initializes the class_number_counts_ vector which is then used to
-   * increment the total_class_count_ value.
-   * @param images std::vector<Image>
-   */
-  void SetClassNumberCounts(const std::vector<Image>& images);
   
   /**
    * Builds the vector of NumberClasses from the given vector of Images.

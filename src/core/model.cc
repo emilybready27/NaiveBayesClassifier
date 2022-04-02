@@ -1,15 +1,17 @@
 #include "core/model.h"
 #include "core/file_writer.h"
 #include <numeric>
-#include <map>
 #include <math.h>
 #include <algorithm>
+#include <iostream>
 
 namespace naivebayes {
 
 Model::Model() {
   total_class_count_ = 0;
   total_image_count_ = 0;
+  row_count_ = 0;
+  column_count_ = 0;
 }
 
 void Model::Train() {
@@ -27,8 +29,9 @@ int Model::Classify(const Image& image) {
 
 float Model::Validate() {
   for (const Image& image : validator_.GetImages()) {
-    int class_number = Classify(image);
-    validator_.AddPrediction(class_number);
+    int actual_class_number = Classify(image);
+    int expected_class_number = image.GetClassNumber();
+    validator_.Compare(expected_class_number, actual_class_number);
   }
   
   return validator_.Validate();
@@ -48,7 +51,6 @@ std::istream& operator>> (std::istream& input, Model& model) {
     // continue building Model if not already complete
     // otherwise, initialize a Validator to test the Model
     if (model.number_classes_.size() == 0) {
-      model.SetClassNumberCounts(images);
       model.ConstructNumberClasses(images);
     } else {
       model.validator_ = Validator(images, model.kMaxClassCount);
@@ -82,54 +84,44 @@ void Model::ConstructSavedModel(const FileReader::FauxModel& faux_model) {
   prior_probs_ = faux_model.prior_probs;
 }
 
-void Model::SetClassNumberCounts(const std::vector<Image>& images) {
-  class_number_counts_ = std::vector<int>(kMaxClassCount, 0);
-  for (const Image& image : images) {
-    int class_number = image.GetClassNumber();
-    class_number_counts_[class_number]++;
-  }
-  
-  for (const int class_number_count : class_number_counts_) {
-    if (class_number_count > 0) {
-      total_class_count_++;
-    }
-  }
-}
-
 void Model::ConstructNumberClasses(const std::vector<Image>& images) {
-  // initialize number classes
-  // map nonempty class numbers to index in number_classes_ vector
-  std::map<int, int> class_numbers;
-  int count = 0;
+  // row_count_ and column_count_ same for all images
+  row_count_ = images[0].GetRowCount();
+  column_count_ = images[0].GetColumnCount();
+  
   for (int i = 0; i < kMaxClassCount; i++) {
-    // only build nonempty number classes
-    if (class_number_counts_[i] != 0) {
-      number_classes_.emplace_back(i);
-      class_numbers[i] = count++;
-    }
+    number_classes_.emplace_back(i,
+                                 row_count_,
+                                 column_count_);
+    class_number_counts_.push_back(0);
+    prior_probs_.push_back(0.0);
   }
   
   // add image to corresponding number class
   for (const Image& image : images) {
     int class_number = image.GetClassNumber();
-    number_classes_[class_numbers[class_number]].AddImage(image);
+    number_classes_[class_number].AddImage(image);
   }
   
-  // row_count_ and column_count_ same for all images
-  row_count_ = number_classes_[0].GetRowCount();
-  column_count_ = number_classes_[0].GetColumnCount();
+  //
+  for (int i = 0; i < kMaxClassCount; i++) {
+    class_number_counts_[i] = number_classes_[i].GetClassNumberCount();
+    if (class_number_counts_[i] > 0) {
+      total_class_count_++;
+    }
+  }
 }
 
 void Model::ComputePriorProbs() {
   total_image_count_ = std::accumulate(class_number_counts_.begin(),
                                        class_number_counts_.end(), 0);
   
-  for (const int class_number_count : class_number_counts_) {
+  for (int i = 0; i < kMaxClassCount; i++) {
     // only compute prior probability for nonempty classes
-    if (class_number_count > 0) {
-      float prob = (class_number_count + kLaplace) /
+    if (class_number_counts_[i] > 0) {
+      float prob = (class_number_counts_[i] + kLaplace) /
                    (total_image_count_ + (total_class_count_ * kLaplace));
-      prior_probs_.push_back(prob);
+      prior_probs_[i] = prob;
     }
   }
 }
@@ -163,6 +155,23 @@ std::vector<float> Model::ComputeLogLikelihoods(const Image& image) {
     }
   }
   return log_likelihoods;
+}
+
+void Model::PrintModel() const {
+  for (int i = 0; i < kMaxClassCount; i++) {
+    std::cout << prior_probs_[i] << " " << std::endl;
+  }
+  std::cout << std::endl;
+  
+  for (int k = 0; k < kMaxClassCount; k++) {
+    for (int i = 0; i < row_count_; i++) {
+      for (int j = 0; j < column_count_; j++) {
+        std::cout << GetFeatureProbsShadedPixel(k, i, j) << " ";
+      }
+      std::cout << std::endl;
+    }
+    std::cout << std::endl;
+  }
 }
 
 float Model::GetKLaplace() const {

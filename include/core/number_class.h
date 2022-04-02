@@ -14,8 +14,7 @@ class NumberClass {
    * Constructs an empty NumberClass from its distinguishing class number.
    * @param class_number int
    */
-  NumberClass(int class_number);
-  
+  NumberClass(int class_number, int row_count, int column_count);
   /**
    * Inserts the given Image into the NumberClass.
    * @param image Image
@@ -53,10 +52,6 @@ class NumberClass {
   int GetClassNumber() const;
   void SetClassNumberCount(int count);
   int GetClassNumberCount() const;
-  void SetRowCount(int count);
-  int GetRowCount() const;
-  void SetColumnCount(int count);
-  int GetColumnCount() const;
   
  private:
   /**
@@ -78,13 +73,6 @@ class NumberClass {
    * Number of columns in the Images.
    */
   int column_count_;
-  
-  /**
-   * Vector of all the Images with this particular class number.
-   * Not retrievable so that Models reconstructed from save files
-   * don't need to define Images as part of their state.
-   */
-  std::vector<Image> images_;
   
   /**
    * Matrix of the feature probabilities of shaded pixels given

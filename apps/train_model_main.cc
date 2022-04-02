@@ -13,8 +13,8 @@ int main(int argc, char** argv) {
   
 //  std::string path_to_data = argv[1];
 //  std::string path_to_save = argv[2];
-  std::string path_to_data = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\training\tinytrainingimagesandlabels.txt)";
-  std::string path_to_save = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\saved\tiny_save_file.txt)";
+  std::string path_to_data = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\training\trainingimagesandlabels.txt)";
+  std::string path_to_save = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\saved\save_file.txt)";
   
   Model model = Model();
   
@@ -25,15 +25,17 @@ int main(int argc, char** argv) {
   model.Train();
 
   // save model in file
-  std::ofstream save_file(path_to_save);
-  save_file << model;
+//  std::ofstream save_file(path_to_save);
+//  save_file << model;
+//
+//  // load in saved model
+//  std::ifstream save_file_read(path_to_save);
+//  save_file_read >> model;
+//  
+//  model.PrintModel();
 
-  // load in saved model
-  std::ifstream save_file_read(path_to_save);
-  save_file_read >> model;
-  
   // load in validator data
-  std::string path_to_validate = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\validation\tinytestimagesandlabels.txt)";
+  std::string path_to_validate = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\validation\testimagesandlabels.txt)";
   std::ifstream validation_data(path_to_validate);
   validation_data >> model;
 
