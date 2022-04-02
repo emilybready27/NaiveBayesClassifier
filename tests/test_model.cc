@@ -53,34 +53,33 @@ TEST_CASE("Test feature probabilities shaded given class 0 3x3") {
   std::ifstream data_file(path_to_data_1);
   data_file >> model;
   model.Train();
-  auto F = model.GetFeatureProbsShaded(0);
   
   SECTION("At (0,0)") {
-    REQUIRE(F[0][0] == Approx(0.66667));
+    REQUIRE(model.GetFeatureProbsShaded(0, 0, 0) == Approx(0.66667));
   }
   SECTION("At (0,1)") {
-    REQUIRE(F[0][1] == Approx(0.66667));
+    REQUIRE(model.GetFeatureProbsShaded(0, 0, 1) == Approx(0.66667));
   }
   SECTION("At (0,2)") {
-    REQUIRE(F[0][2] == Approx(0.66667));
+    REQUIRE(model.GetFeatureProbsShaded(0, 0, 2) == Approx(0.66667));
   }
   SECTION("At (1,0)") {
-    REQUIRE(F[1][0] == Approx(0.66667));
+    REQUIRE(model.GetFeatureProbsShaded(0, 1, 0) == Approx(0.66667));
   }
   SECTION("At (1,1)") {
-    REQUIRE(F[1][1] == Approx(0.33333));
+    REQUIRE(model.GetFeatureProbsShaded(0, 1, 1) == Approx(0.33333));
   }
   SECTION("At (1,2)") {
-    REQUIRE(F[1][2] == Approx(0.66667));
+    REQUIRE(model.GetFeatureProbsShaded(0, 1, 2) == Approx(0.66667));
   }
   SECTION("At (2,0)") {
-    REQUIRE(F[2][0] == Approx(0.66667));
+    REQUIRE(model.GetFeatureProbsShaded(0, 2, 0) == Approx(0.66667));
   }
   SECTION("At (2,1)") {
-    REQUIRE(F[2][1] == Approx(0.66667));
+    REQUIRE(model.GetFeatureProbsShaded(0, 2, 1) == Approx(0.66667));
   }
   SECTION("At (2,2)") {
-    REQUIRE(F[2][2] == Approx(0.66667));
+    REQUIRE(model.GetFeatureProbsShaded(0, 2, 2) == Approx(0.66667));
   }
 }
 
@@ -89,34 +88,33 @@ TEST_CASE("Test feature probabilities shaded given class 1 3x3") {
   std::ifstream data_file(path_to_data_1);
   data_file >> model;
   model.Train();
-  auto F = model.GetFeatureProbsShaded(1);
   
   SECTION("At (0,0)") {
-    REQUIRE(F[0][0] == Approx(0.5));
+    REQUIRE(model.GetFeatureProbsShaded(1, 0, 0) == Approx(0.5));
   }
   SECTION("At (0,1)") {
-    REQUIRE(F[0][1] == Approx(0.75));
+    REQUIRE(model.GetFeatureProbsShaded(1, 0, 1) == Approx(0.75));
   }
   SECTION("At (0,2)") {
-    REQUIRE(F[0][2] == Approx(0.25));
+    REQUIRE(model.GetFeatureProbsShaded(1, 0, 2) == Approx(0.25));
   }
   SECTION("At (1,0)") {
-    REQUIRE(F[1][0] == Approx(0.25));
+    REQUIRE(model.GetFeatureProbsShaded(1, 1, 0) == Approx(0.25));
   }
   SECTION("At (1,1)") {
-    REQUIRE(F[1][1] == Approx(0.75));
+    REQUIRE(model.GetFeatureProbsShaded(1, 1, 1) == Approx(0.75));
   }
   SECTION("At (1,2)") {
-    REQUIRE(F[1][2] == Approx(0.25));
+    REQUIRE(model.GetFeatureProbsShaded(1, 1, 2) == Approx(0.25));
   }
   SECTION("At (2,0)") {
-    REQUIRE(F[2][0] == Approx(0.5));
+    REQUIRE(model.GetFeatureProbsShaded(1, 2, 0) == Approx(0.5));
   }
   SECTION("At (2,1)") {
-    REQUIRE(F[2][1] == Approx(0.75));
+    REQUIRE(model.GetFeatureProbsShaded(1, 2, 1) == Approx(0.75));
   }
   SECTION("At (2,2)") {
-    REQUIRE(F[2][2] == Approx(0.5));
+    REQUIRE(model.GetFeatureProbsShaded(1, 2, 2) == Approx(0.5));
   }
 }
 
@@ -187,20 +185,20 @@ TEST_CASE("Test extraction operator overload with save file") {
   }
   
   SECTION("Prior probabilities derived correctly") {
-    REQUIRE(model.GetPriorProbs().size() == 4);
+    REQUIRE(model.GetPriorProbs().size() == 10);
   }
   
   SECTION("Feature probabilities shaded derived correctly class 0") {
-    REQUIRE(model.GetFeatureProbsShaded(0).size() == 10);
+    REQUIRE(model.GetFeatureProbsShaded(0, 0, 0) == Approx(0.33333));
   }
   SECTION("Feature probabilities shaded derived correctly class 1") {
-    REQUIRE(model.GetFeatureProbsShaded(1).size() == 10);
+    REQUIRE(model.GetFeatureProbsShaded(1, 1, 1) == Approx(0.33333));
   }
   SECTION("Feature probabilities shaded derived correctly class 2") {
-    REQUIRE(model.GetFeatureProbsShaded(2).size() == 10);
+    REQUIRE(model.GetFeatureProbsShaded(2, 2, 2) == Approx(0.33333));
   }
   SECTION("Feature probabilities shaded derived correctly class 3") {
-    REQUIRE(model.GetFeatureProbsShaded(3).size() == 10);
+    REQUIRE(model.GetFeatureProbsShaded(3, 3, 3) == Approx(0.66667));
   }
 }
 
@@ -242,44 +240,44 @@ TEST_CASE("Test insertion operator overload") {
   }
   
   SECTION("Two models have same feature probs shaded for class 0") {
-    REQUIRE(model1.GetFeatureProbsShaded(0)[0][0]
-            == Approx(model2.GetFeatureProbsShaded(0)[0][0]));
+    REQUIRE(model1.GetFeatureProbsShaded(0, 0, 0)
+            == Approx(model2.GetFeatureProbsShaded(0, 0, 0)));
   }
 }
 
-//TEST_CASE("Test loading 28x28 training images") {
-//  Model model = Model();
-//  std::ifstream data_file(path_to_data_3);
-//  data_file >> model;
-//  model.Train();
-//  
-//  SECTION("Correct total class count") {
-//    REQUIRE(model.GetTotalClassCount() == 10);
-//  }
-//  
-//  SECTION("Correct total image count") {
-//    REQUIRE(model.GetTotalImageCount() == 5000);
-//  }
-//  
-//  SECTION("Correct row count") {
-//    REQUIRE(model.GetRowCount() == 28);
-//  }
-//  
-//  SECTION("Correct column count") {
-//    REQUIRE(model.GetColumnCount() == 28);
-//  }
-//  
-//  SECTION("Correct class number counts") {
-//    std::vector<int> counts = {
-//        479, 563, 488, 493, 535, 434, 501, 550, 462, 495
-//    };
-//    REQUIRE(model.GetClassNumberCounts() == counts);
-//  }
-//  
-//  SECTION("Correct number of NumberClasses") {
-//    REQUIRE(model.GetNumberClasses().size() == 10);
-//  }
-//}
+TEST_CASE("Test loading 28x28 training images") {
+  Model model = Model();
+  std::ifstream data_file(path_to_data_3);
+  data_file >> model;
+  model.Train();
+
+  SECTION("Correct total class count") {
+    REQUIRE(model.GetTotalClassCount() == 10);
+  }
+
+  SECTION("Correct total image count") {
+    REQUIRE(model.GetTotalImageCount() == 5000);
+  }
+
+  SECTION("Correct row count") {
+    REQUIRE(model.GetRowCount() == 28);
+  }
+
+  SECTION("Correct column count") {
+    REQUIRE(model.GetColumnCount() == 28);
+  }
+
+  SECTION("Correct class number counts") {
+    std::vector<int> counts = {
+        479, 563, 488, 493, 535, 434, 501, 550, 462, 495
+    };
+    REQUIRE(model.GetClassNumberCounts() == counts);
+  }
+
+  SECTION("Correct number of NumberClasses") {
+    REQUIRE(model.GetNumberClasses().size() == 10);
+  }
+}
 
 TEST_CASE("Test classification method") {
   Model model = Model();

@@ -15,6 +15,7 @@ class NumberClass {
    * @param class_number int
    */
   NumberClass(int class_number, int row_count, int column_count);
+  
   /**
    * Inserts the given Image into the NumberClass.
    * @param image Image
@@ -41,17 +42,12 @@ class NumberClass {
   void SetFeatureProbsShaded(const std::vector<std::vector<float>>& matrix);
   
   /**
-   * Retrieves the feature_probs_shaded_ matrix.
-   * @return std::vector<std::vector<float>>
-   */
-  std::vector<std::vector<float>> GetFeatureProbsShaded() const;
-  
-  /**
    * Getters and setters for other NumberClass state.
    */
   int GetClassNumber() const;
   void SetClassNumberCount(int count);
   int GetClassNumberCount() const;
+  float GetFeatureProbsShaded(int row, int column) const;
   
  private:
   /**

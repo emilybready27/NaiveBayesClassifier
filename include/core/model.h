@@ -9,7 +9,7 @@ namespace naivebayes {
 
 /**
  * Model that stores the Image information and probabilities needed
- * to compute the classification probabilities.
+ * to compute the classification probabilities using Naive Bayes.
  */
 class Model {
  public:
@@ -72,11 +72,10 @@ class Model {
   int GetTotalImageCount() const;
   int GetRowCount() const;
   int GetColumnCount() const;
-  std::vector<int> GetClassNumberCounts() const;
-  std::vector<NumberClass> GetNumberClasses() const;
-  std::vector<float> GetPriorProbs() const;
-  std::vector<std::vector<float>> GetFeatureProbsShaded(int class_number) const;
-  float GetFeatureProbsShadedPixel(int class_number, int row, int column) const;
+  const std::vector<int>& GetClassNumberCounts() const;
+  const std::vector<NumberClass>& GetNumberClasses() const;
+  const std::vector<float>& GetPriorProbs() const;
+  float GetFeatureProbsShaded(int class_number, int row, int column) const;
 
  private:
   /**

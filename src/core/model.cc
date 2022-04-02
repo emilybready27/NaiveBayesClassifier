@@ -146,9 +146,9 @@ std::vector<float> Model::ComputeLogLikelihoods(const Image& image) {
       for (int j = 0; j < image.GetRowCount(); j++) {
         for (int k = 0; k < image.GetColumnCount(); k++) {
           if (image.IsPixelShaded(j, k)) {
-            log_likelihoods[i] += logf(GetFeatureProbsShadedPixel(i, j, k));
+            log_likelihoods[i] += logf(GetFeatureProbsShaded(i, j, k));
           } else {
-            log_likelihoods[i] += logf(1 - GetFeatureProbsShadedPixel(i, j, k));
+            log_likelihoods[i] += logf(1 - GetFeatureProbsShaded(i, j, k));
           }
         }
       }
@@ -166,7 +166,7 @@ void Model::PrintModel() const {
   for (int k = 0; k < kMaxClassCount; k++) {
     for (int i = 0; i < row_count_; i++) {
       for (int j = 0; j < column_count_; j++) {
-        std::cout << GetFeatureProbsShadedPixel(k, i, j) << " ";
+        std::cout << GetFeatureProbsShaded(k, i, j) << " ";
       }
       std::cout << std::endl;
     }
@@ -198,26 +198,21 @@ int Model::GetColumnCount() const {
   return column_count_;
 }
 
-std::vector<int> Model::GetClassNumberCounts() const {
+const std::vector<int>& Model::GetClassNumberCounts() const {
   return class_number_counts_;
 }
 
-std::vector<NumberClass> Model::GetNumberClasses() const {
+const std::vector<NumberClass>& Model::GetNumberClasses() const {
   return number_classes_;
 }
 
-std::vector<float> Model::GetPriorProbs() const {
+const std::vector<float>& Model::GetPriorProbs() const {
   return prior_probs_;
 }
 
-std::vector<std::vector<float>>
-Model::GetFeatureProbsShaded(int class_number) const {
-  return number_classes_[class_number].GetFeatureProbsShaded();
-}
-
-float Model::GetFeatureProbsShadedPixel(int class_number, int row,
+float Model::GetFeatureProbsShaded(int class_number, int row,
                                         int column) const {
-  return number_classes_[class_number].GetFeatureProbsShaded()[row][column];
+  return number_classes_[class_number].GetFeatureProbsShaded(row, column);
 }
 
 } // namespace naivebayes

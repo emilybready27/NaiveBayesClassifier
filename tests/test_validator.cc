@@ -13,9 +13,16 @@ TEST_CASE("Test validation method") {
                         " # "}, 1);
   std::vector<Image> images = {image1};
   Validator validator = Validator(images, 10);
-  validator.Compare(1);
+  validator.Compare(1, 1);
+  validator.Validate();
   
   SECTION("Has correct accuracy") {
-    REQUIRE(validator.Validate() == 1);
+    REQUIRE(validator.GetAccuracy() == 1);
+  }
+  
+  SECTION("Has correct accuracy vector") {
+    std::vector<float> accuracies(10, 0.0);
+    accuracies[1] = 1.0;
+    REQUIRE(validator.GetAccuracies() == accuracies);
   }
 }

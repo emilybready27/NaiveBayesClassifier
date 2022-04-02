@@ -6,7 +6,8 @@
 namespace naivebayes {
 
 /**
- * Class used to judge the accuracy of Image class number predictions.
+ * Class used to judge the accuracy of Image class number predictions
+ * using Naive Bayes.
  */
 class Validator {
  public:
@@ -38,8 +39,8 @@ class Validator {
   /**
    * Getters for Validator state.
    */
-  std::vector<Image> GetImages() const;
-  std::vector<float> GetAccuracies() const;
+  const std::vector<Image>& GetImages() const;
+  const std::vector<float>& GetAccuracies() const;
   float GetAccuracy() const;
 
  private:  

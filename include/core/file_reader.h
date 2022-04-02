@@ -24,8 +24,6 @@ class FileReader {
    */
   FileReader(std::istream& input);
   
-  FileReader(const visualizer::Sketchpad& sketchpad);
-  
   /**
    * Checks if the given file to read from is a save file or data file.
    * @return bool
@@ -53,13 +51,13 @@ class FileReader {
    * Retrieves the FauxModel used to rebuild a saved Model.
    * @return 
    */
-  FauxModel GetFauxModel() const;
+  const FauxModel& GetFauxModel() const;
   
   /**
    * Retrieves the Image data used in training a Model.
    * @return std::vector<Image>
    */
-  std::vector<Image> GetData() const;
+  const std::vector<Image>& GetData() const;
   
  private:
   /**

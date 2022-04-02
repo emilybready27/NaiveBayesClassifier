@@ -133,7 +133,7 @@ TEST_CASE("Test reading from save file") {
   }
   
   SECTION("Faux model has correct prior probabilities") {
-    std::vector<float> prior_probs = {0.25, 0.25, 0.25, 0.25};  
+    std::vector<float> prior_probs = {0.25, 0.25, 0.25, 0.25, 0, 0, 0, 0, 0, 0};  
     REQUIRE(faux_model.prior_probs == prior_probs);
   }  
 }

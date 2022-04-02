@@ -1,15 +1,10 @@
 #include <core/file_reader.h>
 #include <vector>
 #include <string>
-#include <sstream>
 #include <iterator>
 #include <algorithm>
 
 namespace naivebayes {
-
-FileReader::FileReader(const visualizer::Sketchpad& sketchpad) {
-  
-}
 
 FileReader::FileReader(std::istream& input) {
   read_save_file_ = IsSaveFile(input);
@@ -186,11 +181,11 @@ bool FileReader::IsSaveFile() const {
   return read_save_file_;
 }
 
-std::vector<Image> FileReader::GetData() const {
+const std::vector<Image>& FileReader::GetData() const {
   return images_;
 }
 
-FileReader::FauxModel FileReader::GetFauxModel() const {
+const FileReader::FauxModel& FileReader::GetFauxModel() const {
   return faux_model_;
 }
 

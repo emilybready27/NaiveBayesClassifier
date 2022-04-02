@@ -43,12 +43,8 @@ bool Image::IsPixelShaded(int row, int column) const {
   return pixels_[row][column] != ' ';
 }
 
-std::vector<std::vector<char>> Image::GetPixels() const {
+const std::vector<std::vector<char>>& Image::GetPixels() const {
   return pixels_;
-}
-
-void Image::SetClassNumber(int class_number) {
-  class_number_ = class_number;
 }
 
 int Image::GetClassNumber() const {

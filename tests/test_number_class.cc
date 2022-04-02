@@ -16,23 +16,23 @@ TEST_CASE("Test shaded feature probability computation") {
   };
   Image image = Image(pixels, 0);
   
-  NumberClass number_class = NumberClass(0);
+  NumberClass number_class = NumberClass(0, 5, 5);
   number_class.AddImage(image);
   number_class.ComputeFeatureProbsShaded(1.0);
   
   SECTION("First row") {
-    REQUIRE(number_class.GetFeatureProbsShaded()[0][0] == Approx(0.33333));
+    REQUIRE(number_class.GetFeatureProbsShaded(0,0) == Approx(0.33333));
   }
   SECTION("Second row") {
-    REQUIRE(number_class.GetFeatureProbsShaded()[1][1] == Approx(0.66667));
+    REQUIRE(number_class.GetFeatureProbsShaded(1,1) == Approx(0.66667));
   }
   SECTION("Third row") {
-    REQUIRE(number_class.GetFeatureProbsShaded()[2][2] == Approx(0.33333));
+    REQUIRE(number_class.GetFeatureProbsShaded(2,2) == Approx(0.33333));
   }
   SECTION("Fourth row") {
-    REQUIRE(number_class.GetFeatureProbsShaded()[3][3] == Approx(0.66667));
+    REQUIRE(number_class.GetFeatureProbsShaded(3,3) == Approx(0.66667));
   }
   SECTION("Fifth row") {
-    REQUIRE(number_class.GetFeatureProbsShaded()[4][4] == Approx(0.33333));
+    REQUIRE(number_class.GetFeatureProbsShaded(4,4) == Approx(0.33333));
   }
 }

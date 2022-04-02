@@ -74,7 +74,7 @@ TEST_CASE("Test output to file") {
   
   std::getline(read_file, line);
   SECTION("Stores correct prior probs vector") {
-    REQUIRE(line == "0.25 0.25 0.25 0.25 ");
+    REQUIRE(line == "0.25 0.25 0.25 0.25 0 0 0 0 0 0 ");
   }
   
   std::getline(read_file, line);

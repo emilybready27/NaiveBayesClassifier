@@ -57,8 +57,8 @@ void NumberClass::SetFeatureProbsShaded(
   }
 }
 
-std::vector<std::vector<float>> NumberClass::GetFeatureProbsShaded() const {
-  return feature_probs_shaded_;
+float NumberClass::GetFeatureProbsShaded(int row, int column) const {
+  return feature_probs_shaded_[row][column];
 }
 
 int NumberClass::GetClassNumber() const {

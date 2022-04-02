@@ -43,10 +43,9 @@ class Image {
   bool IsPixelShaded(int row, int column) const;
 
   /**
-   * Setters and Getters for Image state.
+   * Getters for Image state.
    */
-  std::vector<std::vector<char>> GetPixels() const;
-  void SetClassNumber(int class_number);
+  const std::vector<std::vector<char>>& GetPixels() const;
   int GetClassNumber() const;
   int GetRowCount() const;
   int GetColumnCount() const;

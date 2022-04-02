@@ -25,14 +25,14 @@ int main(int argc, char** argv) {
   model.Train();
 
   // save model in file
-//  std::ofstream save_file(path_to_save);
-//  save_file << model;
-//
-//  // load in saved model
-//  std::ifstream save_file_read(path_to_save);
-//  save_file_read >> model;
-//  
-//  model.PrintModel();
+  std::ofstream save_file(path_to_save);
+  save_file << model;
+
+  // load in saved model
+  std::ifstream save_file_read(path_to_save);
+  save_file_read >> model;
+
+  model.PrintModel();
 
   // load in validator data
   std::string path_to_validate = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\validation\testimagesandlabels.txt)";

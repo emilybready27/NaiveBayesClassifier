@@ -37,11 +37,11 @@ float Validator::Validate() {
   return accuracy_;
 }
 
-std::vector<Image> Validator::GetImages() const {
+const std::vector<Image>& Validator::GetImages() const {
   return images_;
 }
 
-std::vector<float> Validator::GetAccuracies() const {
+const std::vector<float>& Validator::GetAccuracies() const {
   return accuracies_;
 }
 

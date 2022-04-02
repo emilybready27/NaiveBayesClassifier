@@ -42,7 +42,7 @@ FileWriter::FileWriter(std::ostream& output,
     // probabilities of unshaded are easy to derive, save space
     for (int i = 0; i < row_count; i++) {
       for (int j = 0; j < column_count; j++) {
-        output << number_class.GetFeatureProbsShaded()[i][j] << " ";
+        output << number_class.GetFeatureProbsShaded(i, j) << " ";
       }
       output << std::endl;
     }
