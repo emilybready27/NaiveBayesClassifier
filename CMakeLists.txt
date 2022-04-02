@@ -10,7 +10,7 @@ set(CMAKE_BUILD_TYPE Debug)
 # Let's ensure -std=c++xx instead of -std=g++xx
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Let's nicely support folders in IDE's
+# Let's nicely support folders in IDEs
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 # Warning flags

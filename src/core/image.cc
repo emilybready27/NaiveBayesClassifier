@@ -2,6 +2,15 @@
 
 namespace naivebayes {
 
+Image::Image(int row_count, int column_count) {
+  row_count_ = row_count;
+  column_count_ = column_count;
+  class_number_ = 0;
+  
+  pixels_ = std::vector<std::vector<char>>(row_count,
+                                           std::vector<char>(column_count, ' '));
+}
+
 Image::Image(const std::vector<std::vector<char>>& pixels, int class_number) {
   pixels_ = pixels;
   class_number_ = class_number;
@@ -24,6 +33,10 @@ Image::Image(const std::vector<std::string> &pixels, int class_number) {
 
 int Image::GetPixelColor(int row, int column) const {
   return (pixels_[row][column] == ' ') ? 0 : 1;
+}
+
+void Image::SetPixelColor(int row, int column, char color) {
+  pixels_[row][column] = color;
 }
 
 bool Image::IsPixelShaded(int row, int column) const {

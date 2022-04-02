@@ -97,12 +97,12 @@ class Model {
   /**
    * Smoothing constant to prevent probabilities from being zero.
    */
-  const float kLaplace = 1.0;
+  constexpr const static float kLaplace = 1.0;
   
   /**
    * Number of Number Classes (when each is represented at least once).
    */
-  const int kMaxClassCount = 10;
+  const static int kMaxClassCount = 10;
   
   /**
    * Number of Number Classes (may be less than or equal to 10).

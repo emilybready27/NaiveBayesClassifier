@@ -10,6 +10,17 @@ NaiveBayesApp::NaiveBayesApp()
   ci::app::setWindowSize((int) kWindowSize, (int) kWindowSize);
 }
 
+void NaiveBayesApp::setup() {
+  std::string path_to_data = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\training\trainingimagesandlabels.txt)";
+  model_ = Model();  
+
+  // load in training data
+  std::ifstream data_file(path_to_data);
+  data_file >> model_;
+  
+  model_.Train();
+}
+
 void NaiveBayesApp::draw() {
   ci::Color8u background_color(255, 246, 148);  // light yellow
   ci::gl::clear(background_color);
@@ -38,6 +49,7 @@ void NaiveBayesApp::keyDown(ci::app::KeyEvent event) {
     case ci::app::KeyEvent::KEY_RETURN:
       // ask your classifier to classify the image that's currently drawn on the
       // sketchpad and update current_prediction_
+      current_prediction_ = model_.Classify(sketchpad_.GetImage());
       break;
 
     case ci::app::KeyEvent::KEY_DELETE:

@@ -7,6 +7,10 @@
 
 namespace naivebayes {
 
+FileReader::FileReader(const visualizer::Sketchpad& sketchpad) {
+  
+}
+
 FileReader::FileReader(std::istream& input) {
   read_save_file_ = IsSaveFile(input);
   if (read_save_file_) {

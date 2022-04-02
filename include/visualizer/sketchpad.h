@@ -2,6 +2,8 @@
 
 #include "cinder/gl/gl.h"
 
+#include <core/image.h>
+
 namespace naivebayes {
 
 namespace visualizer {
@@ -48,6 +50,8 @@ class Sketchpad {
    * Set all of the sketchpad pixels to an unshaded state.
    */
   void Clear();
+  
+  Image GetImage() const;
 
  private:
   glm::vec2 top_left_corner_;
@@ -58,6 +62,8 @@ class Sketchpad {
   double pixel_side_length_;
 
   double brush_radius_;
+  
+  Image image_;
 };
 
 }  // namespace visualizer

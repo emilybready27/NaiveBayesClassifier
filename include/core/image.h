@@ -9,6 +9,11 @@ namespace naivebayes {
 class Image {
  public:
   /**
+   * Default constructor.
+   */
+  Image(int row_count, int column_count);
+  
+  /**
    * Constructs an Image from a matrix of pixels and its corresponding
    * class number.
    * @param pixels std::vector<std::vector<char>>
@@ -32,6 +37,8 @@ class Image {
    * @return int (0 or 1)
    */
   int GetPixelColor(int row, int column) const;
+  
+  void SetPixelColor(int row, int column, char color);
   
   bool IsPixelShaded(int row, int column) const;
 

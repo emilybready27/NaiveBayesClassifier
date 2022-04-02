@@ -3,6 +3,7 @@
 #include <vector>
 #include "image.h"
 #include "number_class.h"
+#include <visualizer/sketchpad.h>
 
 namespace naivebayes {
 
@@ -22,6 +23,8 @@ class FileReader {
    * @param input std::istream
    */
   FileReader(std::istream& input);
+  
+  FileReader(const visualizer::Sketchpad& sketchpad);
   
   /**
    * Checks if the given file to read from is a save file or data file.
