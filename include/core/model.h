@@ -40,7 +40,8 @@ class Model {
   std::vector<float> ComputeLogLikelihoods(const Image& image);
   
   /**
-   * Tests the accuracy of the calling Model by returning an overall accuracy.
+   * Tests the accuracy of the calling Model by returning a ratio of
+   * number of correct predictions to number of total predictions.
    */
   float Validate();
   
@@ -61,6 +62,9 @@ class Model {
    */
   friend std::ostream& operator<< (std::ostream& out, Model& model);
   
+  /**
+   * Prints information about the Model, used for debugging purposes.
+   */
   void PrintModel() const;
   
   /**
@@ -96,7 +100,7 @@ class Model {
   /**
    * Smoothing constant to prevent probabilities from being zero.
    */
-  constexpr const static float kLaplace = 1.0;
+  constexpr static float kLaplace = 1.0;
   
   /**
    * Number of Number Classes (when each is represented at least once).

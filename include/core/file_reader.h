@@ -49,7 +49,7 @@ class FileReader {
   
   /**
    * Retrieves the FauxModel used to rebuild a saved Model.
-   * @return 
+   * @return FauxModel
    */
   const FauxModel& GetFauxModel() const;
   

@@ -24,14 +24,16 @@ class Validator {
   Validator(const std::vector<Image>& images, int k_max_class_count);
   
   /**
-   * Adds an actual_class_number prediction from a Model to internal state.
-   * @param actual_class_number 
+   * Updates its internal state based on the comparison of these two numbers.
+   * @param expected_class_number int
+   * @param actual_class_number int
    */
   void Compare(int expected_class_number, int actual_class_number);
   
   /**
    * Calculates scaled ratios for correct number of predictions to
    * total number of predictions, both between and within NumberClasses.
+   * Returns the accuracy as a ratio between these two quantities.
    * @return float
    */
   float Validate();

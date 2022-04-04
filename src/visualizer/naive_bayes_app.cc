@@ -11,7 +11,7 @@ NaiveBayesApp::NaiveBayesApp()
 }
 
 void NaiveBayesApp::setup() {
-  // load in saved Model, already trained
+  // load in saved Naive Bayes Model, already trained
   std::string path_to_save = R"(C:\Users\Mary\Desktop\Cinder\my-projects\naivebayes-ebready2\data\saved\save_file.txt)";
   model_ = Model();
   std::ifstream save_file(path_to_save);

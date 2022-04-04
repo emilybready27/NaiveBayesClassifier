@@ -7,15 +7,15 @@ Image::Image(int row_count, int column_count) {
   column_count_ = column_count;
   class_number_ = 0;
   
-  pixels_ = std::vector<std::vector<char>>(row_count,
-                                           std::vector<char>(column_count, ' '));
+  std::vector<char> row(column_count, ' ');
+  pixels_ = std::vector<std::vector<char>>(row_count, row);
 }
 
 Image::Image(const std::vector<std::vector<char>>& pixels, int class_number) {
   pixels_ = pixels;
   class_number_ = class_number;
-  row_count_ = pixels.size();
-  column_count_ = pixels[0].size();
+  row_count_ = pixels_.size();
+  column_count_ = pixels_[0].size();
 }
 
 Image::Image(const std::vector<std::string> &pixels, int class_number) {
@@ -28,7 +28,7 @@ Image::Image(const std::vector<std::string> &pixels, int class_number) {
 
   class_number_ = class_number;
   row_count_ = pixels_.size();
-  column_count_ = pixels[0].size();
+  column_count_ = pixels_[0].size();
 }
 
 int Image::GetPixelColor(int row, int column) const {

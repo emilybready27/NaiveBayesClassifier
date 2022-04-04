@@ -166,7 +166,7 @@ int FileReader::ReadDataFileRows(std::istream& input) {
     num_rows = row_iterator - 1;
   }
   
-  input.clear();
+  input.clear(); // because an EOF may have been read
   input.seekg(0); // set iterator to beginning of file again
   return num_rows;
 }

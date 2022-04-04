@@ -11,8 +11,11 @@ namespace naivebayes {
 class NumberClass {
  public: 
   /**
-   * Constructs an empty NumberClass from its distinguishing class number.
+   * Constructs an empty NumberClass from its distinguishing class number
+   * and the dimensions needed for a probability matrix.
    * @param class_number int
+   * @param row_count int
+   * @param column_count int
    */
   NumberClass(int class_number, int row_count, int column_count);
   

@@ -24,6 +24,7 @@ void NumberClass::AddImage(const Image& image) {
 }
 
 void NumberClass::ComputeFeatureProbsShaded(float k_laplace) {
+  // don't consider empty NumberClass
   if (class_number_count_ <= 0) {
     return;
   }

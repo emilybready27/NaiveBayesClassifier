@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+
 namespace naivebayes {
 
 /**
@@ -9,7 +10,7 @@ namespace naivebayes {
 class Image {
  public:
   /**
-   * Default constructor.
+   * Constructs an Image of all unshaded pixels.
    */
   Image(int row_count, int column_count);
   
@@ -38,8 +39,21 @@ class Image {
    */
   int GetPixelColor(int row, int column) const;
   
+  /**
+   * Sets the color at the given coordinates to the given color by mapping
+   * ' ' symbol to color 0 and '#' or '+' symbol to color 1.
+   * @param row int
+   * @param column int
+   * @param color char (' ', '#', or '+')
+   */
   void SetPixelColor(int row, int column, char color);
   
+  /**
+   * Determines if the pixel at the given location is shaded or not.
+   * @param row int
+   * @param column int
+   * @return bool
+   */
   bool IsPixelShaded(int row, int column) const;
 
   /**

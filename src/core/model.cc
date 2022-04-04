@@ -20,8 +20,10 @@ void Model::Train() {
 }
 
 int Model::Classify(const Image& image) {
+  // index corresponds to class number (0-9)
   std::vector<float> log_likelihoods = ComputeLogLikelihoods(image);
   
+  // get index that contains largest log-likelihood
   auto max_it = std::max_element(log_likelihoods.begin(),
                                  log_likelihoods.end());
   return std::distance(log_likelihoods.begin(), max_it);
@@ -34,6 +36,7 @@ float Model::Validate() {
     validator_.Compare(expected_class_number, actual_class_number);
   }
   
+  // returns accuracy of prediction method
   return validator_.Validate();
 }
 
@@ -97,13 +100,13 @@ void Model::ConstructNumberClasses(const std::vector<Image>& images) {
     prior_probs_.push_back(0.0);
   }
   
-  // add image to corresponding number class
+  // add image information to corresponding number class
   for (const Image& image : images) {
     int class_number = image.GetClassNumber();
     number_classes_[class_number].AddImage(image);
   }
   
-  //
+  // calculate number of Images represented by each class number
   for (int i = 0; i < kMaxClassCount; i++) {
     class_number_counts_[i] = number_classes_[i].GetClassNumberCount();
     if (class_number_counts_[i] > 0) {
@@ -135,9 +138,12 @@ void Model::ComputeFeatureProbsShaded() {
 std::vector<float> Model::ComputeLogLikelihoods(const Image& image) {
   std::vector<float> log_likelihoods(kMaxClassCount, 0);
   for (int i = 0; i < kMaxClassCount; i++) {
+    
     // empty NumberClasses not considered
     if (class_number_counts_[i] <= 0) {
+      // set to negative infinity for comparison purposes
       log_likelihoods[i] = -1 * std::numeric_limits<float>::infinity();
+      
     } else {
       // add log of prior probability for class i
       log_likelihoods[i] += logf(prior_probs_[i]);
@@ -154,6 +160,7 @@ std::vector<float> Model::ComputeLogLikelihoods(const Image& image) {
       }
     }
   }
+  
   return log_likelihoods;
 }
 

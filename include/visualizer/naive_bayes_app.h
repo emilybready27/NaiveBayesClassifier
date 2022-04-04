@@ -29,8 +29,19 @@ class NaiveBayesApp : public ci::app::App {
   const size_t kImageDimension = 28;
 
  private:
+  /**
+   * Contains the pixelated information.
+   */
   Sketchpad sketchpad_;
+  
+  /**
+   * Contains the Naive Bayes Model for classification.
+   */
   Model model_;
+  
+  /**
+   * The prediction of the number drawn.
+   */
   int current_prediction_ = -1;
 };
 
