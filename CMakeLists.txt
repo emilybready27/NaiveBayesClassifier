@@ -10,7 +10,7 @@ set(CMAKE_BUILD_TYPE Debug)
 # Let's ensure -std=c++xx instead of -std=g++xx
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Let's nicely support folders in IDE's
+# Let's nicely support folders in IDEs
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 # Warning flags
@@ -33,13 +33,14 @@ endif()
 FetchContent_Declare(
         catch2
         GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+        GIT_TAG v2.x
 )
 
 # Adds Catch2 testing library
 FetchContent_GetProperties(catch2)
 if(NOT catch2_POPULATED)
     FetchContent_Populate(catch2)
-    add_library(catch2 INTERFACE)
+    add_library(catch2 INTERFACE src/core/image.cc include/core/image.h tests/test_image.cc src/core/model.cc include/core/model.h tests/test_model.cc src/core/number_class.cc include/core/number_class.h src/core/file_writer.cc include/core/file_writer.h tests/test_file_writer.cc tests/test_number_class.cc src/core/validator.cc include/core/validator.h tests/test_validator.cc)
     target_include_directories(catch2 INTERFACE ${catch2_SOURCE_DIR}/single_include)
 endif()
 
@@ -48,13 +49,23 @@ get_filename_component(APP_PATH "${CMAKE_CURRENT_SOURCE_DIR}/" ABSOLUTE)
 
 include("${CINDER_PATH}/proj/cmake/modules/cinderMakeApp.cmake")
 
-list(APPEND CORE_SOURCE_FILES src/core/rename_this_file.cc)
+list(APPEND CORE_SOURCE_FILES src/core/model.cc
+                              src/core/file_reader.cc
+                              src/core/file_writer.cc
+                              src/core/validator.cc
+                              src/core/number_class.cc
+                              src/core/image.cc)
 
 list(APPEND SOURCE_FILES    ${CORE_SOURCE_FILES}
                             src/visualizer/naive_bayes_app.cc
                             src/visualizer/sketchpad.cc)
 
-list(APPEND TEST_FILES tests/rename_this_test_file.cc)
+list(APPEND TEST_FILES tests/test_model.cc
+                       tests/test_file_reader.cc
+                       tests/test_file_writer.cc
+                       tests/test_validator.cc
+                       tests/test_number_class.cc
+                       tests/test_image.cc)
 
 add_executable(train-model apps/train_model_main.cc ${CORE_SOURCE_FILES})
 target_include_directories(train-model PRIVATE include)

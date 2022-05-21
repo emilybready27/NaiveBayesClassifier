@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cinder/gl/gl.h"
+#include <core/image.h>
 
 namespace naivebayes {
 
@@ -49,15 +50,37 @@ class Sketchpad {
    */
   void Clear();
 
+  /**
+   * Retrieves the internal Image representation.
+   * @return Image
+   */
+  const Image& GetImage() const;
+
  private:
+  /**
+   * Location of the top left corner of the Sketchpad.
+   */
   glm::vec2 top_left_corner_;
 
+  /**
+   * Size of the row width and column height.
+   */
   size_t num_pixels_per_side_;
 
-  /** Number of screen pixels in the width/height of one sketchpad pixel */
+  /**
+   * Number of screen pixels in the width/height of one sketchpad pixel.
+   */
   double pixel_side_length_;
 
+  /**
+   * Distance from the brush that will be shaded.
+   */
   double brush_radius_;
+
+  /**
+   * Internal Image representation of the Sketchpad.
+   */
+  Image image_;
 };
 
 }  // namespace visualizer
